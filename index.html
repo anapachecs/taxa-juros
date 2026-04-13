@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Juros Legais - Lei nº 14.905/2024</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --azul-principal: #0052CC;
+            --azul-claro: #E3F2FD;
+            --azul-medio: #1976D2;
+            --branco: #FFFFFF;
+            --cinza-claro: #F5F5F5;
+            --cinza-medio: #EEEEEE;
+            --cinza-escuro: #666666;
+            --sucesso: #4CAF50;
+            --erro: #F44336;
+            --sombra: 0 2px 8px rgba(0, 82, 204, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--azul-claro) 0%, var(--branco) 100%);
+            color: var(--cinza-escuro);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container-principal {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* ===== CABEÇALHO ===== */
+        .cabecalho {
+            background: var(--azul-principal);
+            color: var(--branco);
+            padding: 35px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: var(--sombra);
+            text-align: center;
+        }
+
+        .cabecalho h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .cabecalho p {
+            font-size: 0.95em;
+            opacity: 0.95;
+        }
+
+        /* ===== CARDS ===== */
+        .painel {
+            background: var(--branco);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--sombra);
+            border-left: 5px solid var(--azul-principal);
+            margin-bottom: 25px;
+        }
+
+        .painel-titulo {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--azul-principal);
+            margin-bottom: 20px;
+        }
+
+        /* ===== FORMULÁRIO ===== */
+        .grupo-formulario {
+            margin-bottom: 20px;
+        }
+
+        .rotulo {
+            display: block;
+            font-weight: 600;
+            color: var(--azul-principal);
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--cinza-medio);
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--azul-principal);
+            box-shadow: 0 0 0 3px var(--azul-claro);
+        }
+
+        /* ===== SELETOR ANTES/DEPOIS ===== */
+        .seletor-lei {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .opcao-lei {
+            border: 2px solid var(--cinza-medio);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            background: var(--branco);
+        }
+
+        .opcao-lei:hover {
+            border-color: var(--azul-principal);
+            background: var(--azul-claro);
+        }
+
+        .opcao-lei.ativo {
+            border-color: var(--azul-principal);
+            background: var(--azul-claro);
+            box-shadow: var(--sombra);
+        }
+
+        .opcao-lei-titulo {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--azul-principal);
+            margin-bottom: 5px;
+        }
+
+        .opcao-lei-data {
+            font-size: 0.85em;
+            color: var(--cinza-escuro);
+        }
+
+        /* ===== CAMPOS DINÂMICOS ===== */
+        .campos-dinamicos {
+            display: none;
+            padding-top: 20px;
+            border-top: 2px solid var(--cinza-medio);
+            margin-top: 20px;
+        }
+
+        .campos-dinamicos.ativo {
+            display: block;
+        }
+
+        /* ===== BOTÕES ===== */
+        .grupo-botoes {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .botao {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .botao-principal {
+            background: var(--azul-principal);
+            color: var(--branco);
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .botao-principal:hover {
+            background: var(--azul-medio);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 82, 204, 0.3);
+        }
+
+        .botao-secundario {
+            background: var(--cinza-medio);
+            color: var(--cinza-escuro);
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .botao-secundario:hover {
+            background: var(--cinza-claro);
+        }
+
+        /* ===== RESULTADOS ===== */
+        .area-resultados {
+            display: none;
+        }
+
+        .area-resultados.ativo {
+            display: block;
+        }
+
+        .resultado-bloco {
+            background: var(--cinza-claro);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid var(--azul-principal);
+            margin-bottom: 20px;
+        }
+
+        .resultado-titulo {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--azul-principal);
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--azul-principal);
+        }
+
+        .resultado-linha {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--cinza-medio);
+        }
+
+        .resultado-linha:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .resultado-label {
+            font-weight: 600;
+            color: var(--cinza-escuro);
+        }
+
+        .resultado-valor {
+            text-align: right;
+            font-weight: 700;
+            color: var(--azul-principal);
+            font-size: 1.05em;
+        }
+
+        .resultado-total {
+            grid-column: 1 / -1;
+            background: var(--azul-principal);
+            color: var(--branco);
+            padding: 15px;
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+            font-weight: 700;
+        }
+
+        /* ===== FÓRMULAS ===== */
+        .formula-bloco {
+            background: var(--azul-claro);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid var(--azul-principal);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .formula-titulo {
+            font-weight: 700;
+            color: var(--azul-principal);
+            margin-bottom: 10px;
+        }
+
+        /* ===== GUIA TEÓRICO ===== */
+        .guia-teorico {
+            background: var(--branco);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--sombra);
+            margin-top: 30px;
+        }
+
+        .guia-titulo {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--azul-principal);
+            margin-bottom: 20px;
+        }
+
+        .topico {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--cinza-medio);
+        }
+
+        .topico:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .topico-titulo {
+            font-size: 1.05em;
+            font-weight: 700;
+            color: var(--azul-principal);
+            margin-bottom: 8px;
+        }
+
+        .topico-texto {
+            line-height: 1.5;
+            color: var(--cinza-escuro);
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+
+        .base-legal {
+            background: var(--azul-claro);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            color: var(--azul-principal);
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* ===== RODAPÉ ===== */
+        .rodape {
+            background: var(--azul-principal);
+            color: var(--branco);
+            text-align: center;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+
+        .rodape p {
+            margin-bottom: 6px;
+        }
+
+        .oculto {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .cabecalho h1 {
+                font-size: 1.6em;
+            }
+
+            .seletor-lei {
+                grid-template-columns: 1fr;
+            }
+
+            .resultado-linha {
+                grid-template-columns: 1fr;
+            }
+
+            .resultado-total {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-principal">
+        <!-- ===== CABEÇALHO ===== -->
+        <div class="cabecalho">
+            <h1>📊 Calculadora de Juros Legais</h1>
+            <p>Lei nº 14.905, de 13 de dezembro de 2024</p>
+        </div>
+
+        <!-- ===== PAINEL PRINCIPAL ===== -->
+        <div class="painel">
+            <div class="painel-titulo">📝 Dados da Simulação</div>
+
+            <!-- Dados Básicos -->
+            <div class="grupo-formulario">
+                <label class="rotulo">Valor do Capital (R$)</label>
+                <input type="number" id="valorCapital" placeholder="10000.00" step="0.01" min="0.01">
+            </div>
+
+            <div class="grupo-formulario">
+                <label class="rotulo">Data Inicial</label>
+                <input type="date" id="dataInicial">
+            </div>
+
+            <div class="grupo-formulario">
+                <label class="rotulo">Data Final</label>
+                <input type="date" id="dataFinal">
+            </div>
+
+            <!-- Seletor Antes/Depois da Lei -->
+            <div class="grupo-formulario">
+                <label class="rotulo">Qual legislação se aplica?</label>
+                <div class="seletor-lei">
+                    <div class="opcao-lei" onclick="selecionarLei('antes')">
+                        <div class="opcao-lei-titulo">⏱️ Antes</div>
+                        <div class="opcao-lei-data">Até 29/08/2024</div>
+                    </div>
+                    <div class="opcao-lei" onclick="selecionarLei('depois')">
+                        <div class="opcao-lei-titulo">⏱️ Depois</div>
+                        <div class="opcao-lei-data">A partir de 30/08/2024</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campos Dinâmicos -->
+            <div class="campos-dinamicos" id="camposDinamicos">
+                <!-- Para Antes da Lei -->
+                <div id="camposAntes" class="oculto">
+                    <div class="grupo-formulario">
+                        <label class="rotulo">Tipo de Cálculo</label>
+                        <select id="tipoCalculoAntes">
+                            <option value="simples">Juros Simples</option>
+                            <option value="composto">Juros Compostos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Para Depois da Lei -->
+                <div id="camposDepois" class="oculto">
+                    <div class="grupo-formulario">
+                        <label class="rotulo">Tipo de Débito</label>
+                        <select id="tipoDebitoDepois">
+                            <option value="">Selecione...</option>
+                            <option value="comum">Foro Cível / Tributário (Com juros)</option>
+                            <option value="criminal">Foro Criminal (Sem juros)</option>
+                        </select>
+                    </div>
+
+                    <div class="grupo-formulario">
+                        <label class="rotulo">Tipo de Cálculo</label>
+                        <select id="tipoCalculoDepois">
+                            <option value="simples">Juros Simples</option>
+                            <option value="composto">Juros Compostos</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="grupo-botoes">
+                <button class="botao botao-principal" onclick="executarCalculo()">Calcular</button>
+                <button class="botao botao-secundario" onclick="limparFormulario()">Limpar</button>
+            </div>
+        </div>
+
+        <!-- ===== RESULTADOS ===== -->
+        <div class="area-resultados" id="areaResultados">
+            <div class="painel">
+                <div class="painel-titulo">📊 Resultados</div>
+
+                <div class="resultado-bloco">
+                    <div class="resultado-titulo" id="resultadoTitulo">Resultado</div>
+                    
+                    <div class="resultado-linha">
+                        <span class="resultado-label">Capital Inicial:</span>
+                        <span class="resultado-valor" id="resultadoCapital">R$ 0,00</span>
+                    </div>
+
+                    <div class="resultado-linha">
+                        <span class="resultado-label">Período:</span>
+                        <span class="resultado-valor" id="resultadoPeriodo">0 dias</span>
+                    </div>
+
+                    <div class="resultado-linha">
+                        <span class="resultado-label">Taxa de Juros:</span>
+                        <span class="resultado-valor" id="resultadoTaxa">0,00%</span>
+                    </div>
+
+                    <div class="resultado-linha">
+                        <span class="resultado-label">Juros Legais:</span>
+                        <span class="resultado-valor" id="resultadoJuros">R$ 0,00</span>
+                    </div>
+
+                    <div class="resultado-linha">
+                        <span class="resultado-label">Aplicação Correta da Correção Monetária:</span>
+                        <span class="resultado-valor" id="resultadoCorrecao">R$ 0,00</span>
+                    </div>
+
+                    <div class="resultado-total">
+                        <span>TOTAL:</span>
+                        <span id="resultadoTotal">R$ 0,00</span>
+                    </div>
+
+                    <div class="formula-bloco">
+                        <div class="formula-titulo">📐 Fórmulas Utilizadas:</div>
+                        <div id="formulasUtilizadas"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== GUIA TEÓRICO ===== -->
+        <div class="guia-teorico">
+            <div class="guia-titulo">📚 Guia Educacional</div>
+
+            <div class="topico">
+                <div class="topico-titulo">O que são Juros Legais?</div>
+                <div class="topico-texto">
+                    São aqueles fixados por lei quando não há cláusula contratual estabelecendo taxa diversa. Aplicam-se a débitos decorrentes de condenações judiciais e responsabilidades legais.
+                </div>
+                <div class="base-legal">
+                    📋 Código Civil, artigo 406
+                </div>
+            </div>
+
+            <div class="topico">
+                <div class="topico-titulo">Aplicação Correta dos Juros Legais (Antes - Até 29/08/2024)</div>
+                <div class="topico-texto">
+                    <strong>Taxa:</strong> 0,5% a.m. (até 10/01/2003) ou 1% a.m. (de 11/01/2003 em diante)
+                </div>
+                <div class="topico-texto">
+                    Os juros são calculados de forma simples (sobre o capital) ou composta (sobre capital + juros anteriores), conforme a modalidade de débito.
+                </div>
+                <div class="base-legal">
+                    📋 Código Civil, artigos 405 e 406 (redação anterior a 30/08/2024)
+                </div>
+            </div>
+
+            <div class="topico">
+                <div class="topico-titulo">Aplicação Correta dos Juros Legais (Depois - A partir de 30/08/2024)</div>
+                <div class="topico-texto">
+                    <strong>Taxa:</strong> Taxa SELIC + 0,5% ao mês, com limite máximo de 1% ao mês
+                </div>
+                <div class="topico-texto">
+                    <strong>Exceção:</strong> No Foro Criminal, foi eliminado o direito a juros legais. Aplica-se apenas correção monetária.
+                </div>
+                <div class="base-legal">
+                    📋 Lei nº 14.905, de 13 de dezembro de 2024
+                </div>
+            </div>
+
+            <div class="topico">
+                <div class="topico-titulo">Aplicação Correta da Correção Monetária (Antes da Lei)</div>
+                <div class="topico-texto">
+                    <strong>Fórmula:</strong> Correção = Capital × [(1 + IPCA)^Anos - 1]
+                </div>
+                <div class="topico-texto">
+                    A correção recompõe o poder de compra usando o IPCA como índice de referência, em estimativa de 4% ao ano.
+                </div>
+                <div class="base-legal">
+                    📋 Lei nº 11.960/2009
+                </div>
+            </div>
+
+            <div class="topico">
+                <div class="topico-titulo">Aplicação Correta da Correção Monetária (Depois da Lei)</div>
+                <div class="topico-texto">
+                    <strong>Fórmula:</strong> Correção = Capital × [(1 + IPCA)^Anos - 1]
+                </div>
+                <div class="topico-texto">
+                    A fórmula permanece a mesma. A mudança foi apenas na taxa de juros legais, não na correção monetária.
+                </div>
+                <div class="base-legal">
+                    📋 Lei nº 11.960/2009 (mantida a mesma aplicação)
+                </div>
+            </div>
+
+            <div class="topico">
+                <div class="topico-titulo">Diferença Entre Juros e Correção</div>
+                <div class="topico-texto">
+                    <strong>Juros:</strong> Compensação pelo atraso. Considerado lucro.
+                </div>
+                <div class="topico-texto">
+                    <strong>Correção:</strong> Recomposição do poder de compra. Não é lucro, é reajuste do valor.
+                </div>
+                <div class="topico-texto">
+                    Ambos são cumulativos e devem ser calculados separadamente.
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== RODAPÉ ===== -->
+        <div class="rodape">
+            <p><strong>Sistema Educacional de Juros Legais</strong></p>
+            <p>⚖️ Ferramenta didática para estudantes de Direito.</p>
+            <p style="margin-top: 12px; font-size: 0.85em;">Não substitui análise de profissional especializado.</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONSTANTES =====
+        const TAXA_SELIC_ESTIMADA = 0.095; // 9,5% a.a.
+        const TAXA_ANTES = 0.01; // 1% a.m. (simplificado)
+        const IPCA_ESTIMADO = 0.04; // 4% a.a.
+        const DATA_MUDANCA_LEI = new Date('2024-08-30');
+
+        let leiSelecionada = null;
+
+        // ===== SELEÇÃO DA LEI =====
+        function selecionarLei(lei) {
+            leiSelecionada = lei;
+
+            // Atualiza visual
+            document.querySelectorAll('.opcao-lei').forEach(el => el.classList.remove('ativo'));
+            event.target.closest('.opcao-lei').classList.add('ativo');
+
+            // Mostra campos
+            document.getElementById('camposDinamicos').classList.add('ativo');
+            if (lei === 'antes') {
+                document.getElementById('camposAntes').classList.remove('oculto');
+                document.getElementById('camposDepois').classList.add('oculto');
+            } else {
+                document.getElementById('camposAntes').classList.add('oculto');
+                document.getElementById('camposDepois').classList.remove('oculto');
+            }
+        }
+
+        // ===== FUNÇÕES UTILITÁRIAS =====
+        function formatarMoeda(valor) {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+        }
+
+        function calcularDias(dataInicial, dataFinal) {
+            const ms = dataFinal.getTime() - dataInicial.getTime();
+            return Math.ceil(ms / (1000 * 60 * 60 * 24));
+        }
+
+        function calcularAnos(dias) {
+            return dias / 365;
+        }
+
+        // ===== CÁLCULO =====
+        function executarCalculo() {
+            const capital = parseFloat(document.getElementById('valorCapital').value);
+            const dataInicial = new Date(document.getElementById('dataInicial').value);
+            const dataFinal = new Date(document.getElementById('dataFinal').value);
+
+            if (!capital || !leiSelecionada || !dataInicial.getTime() || !dataFinal.getTime()) {
+                alert('Preencha todos os campos!');
+                return;
+            }
+
+            if (dataInicial >= dataFinal) {
+                alert('Data final deve ser posterior à inicial!');
+                return;
+            }
+
+            const dias = calcularDias(dataInicial, dataFinal);
+            const anos = calcularAnos(dias);
+            const meses = dias / 30;
+
+            // Correção monetária (igual para ambos)
+            const montanteCorrigido = capital * Math.pow(1 + IPCA_ESTIMADO, anos);
+            const correcao = montanteCorrigido - capital;
+
+            let juros = 0;
+            let taxa = 0;
+            let tipoCalculo = '';
+            let titulo = '';
+            let formulas = '';
+
+            if (leiSelecionada === 'antes') {
+                tipoCalculo = document.getElementById('tipoCalculoAntes').value;
+                taxa = TAXA_ANTES;
+                titulo = '⏱️ Cálculo Anterior à Lei nº 14.905/2024';
+
+                if (tipoCalculo === 'simples') {
+                    juros = capital * taxa * meses;
+                    formulas = `<strong>Juros Simples (1% a.m.):</strong><br/>Capital × Taxa × Meses<br/>${capital.toFixed(2)} × 0,01 × ${meses.toFixed(2)} = ${juros.toFixed(2)}`;
+                } else {
+                    const montante = capital * Math.pow(1 + taxa, meses);
+                    juros = montante - capital;
+                    formulas = `<strong>Juros Compostos (1% a.m.):</strong><br/>Capital × (1 + Taxa)^Meses - Capital<br/>${capital.toFixed(2)} × (1,01)^${meses.toFixed(2)} - ${capital.toFixed(2)} = ${juros.toFixed(2)}`;
+                }
+            } else {
+                const tipoDebito = document.getElementById('tipoDebitoDepois').value;
+                tipoCalculo = document.getElementById('tipoCalculoDepois').value;
+
+                if (!tipoDebito) {
+                    alert('Selecione o tipo de débito!');
+                    return;
+                }
+
+                titulo = '⏱️ Cálculo Posterior à Lei nº 14.905/2024';
+
+                if (tipoDebito === 'criminal') {
+                    juros = 0;
+                    taxa = 0;
+                    formulas = `<strong>Foro Criminal - Sem Juros Legais:</strong><br/>Lei nº 14.905/2024 eliminou juros em causas criminais<br/>Juros = R$ 0,00`;
+                } else {
+                    taxa = Math.min((TAXA_SELIC_ESTIMADA / 12) + 0.005, 0.01);
+                    if (tipoCalculo === 'simples') {
+                        juros = capital * taxa * meses;
+                        formulas = `<strong>Juros Simples (SELIC + 0,5%, máx. 1% a.m.):</strong><br/>Capital × Taxa × Meses<br/>${capital.toFixed(2)} × ${taxa.toFixed(6)} × ${meses.toFixed(2)} = ${juros.toFixed(2)}`;
+                    } else {
+                        const montante = capital * Math.pow(1 + taxa, meses);
+                        juros = montante - capital;
+                        formulas = `<strong>Juros Compostos (SELIC + 0,5%, máx. 1% a.m.):</strong><br/>Capital × (1 + Taxa)^Meses - Capital<br/>${capital.toFixed(2)} × (1 + ${taxa.toFixed(6)})^${meses.toFixed(2)} - ${capital.toFixed(2)} = ${juros.toFixed(2)}`;
+                    }
+                }
+            }
+
+            // Exibe resultados
+            document.getElementById('resultadoTitulo').textContent = titulo;
+            document.getElementById('resultadoCapital').textContent = formatarMoeda(capital);
+            document.getElementById('resultadoPeriodo').textContent = dias + ' dias';
+            document.getElementById('resultadoTaxa').textContent = (taxa * 100).toFixed(4) + '%';
+            document.getElementById('resultadoJuros').textContent = formatarMoeda(juros);
+            document.getElementById('resultadoCorrecao').textContent = formatarMoeda(correcao);
+            document.getElementById('resultadoTotal').textContent = formatarMoeda(capital + juros + correcao);
+
+            formulas += `<br/><br/><strong>Correção Monetária (IPCA 4% a.a.):</strong><br/>Capital × [(1,04)^${anos.toFixed(4)} - 1] = ${correcao.toFixed(2)}`;
+            document.getElementById('formulasUtilizadas').innerHTML = formulas;
+
+            document.getElementById('areaResultados').classList.add('ativo');
+            setTimeout(() => {
+                document.getElementById('areaResultados').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        function limparFormulario() {
+            document.getElementById('valorCapital').value = '';
+            document.getElementById('dataInicial').value = '';
+            document.getElementById('dataFinal').value = '';
+            document.getElementById('tipoCalculoAntes').value = 'simples';
+            document.getElementById('tipoCalculoDepois').value = 'simples';
+            document.getElementById('tipoDebitoDepois').value = '';
+            leiSelecionada = null;
+            document.querySelectorAll('.opcao-lei').forEach(el => el.classList.remove('ativo'));
+            document.getElementById('camposDinamicos').classList.remove('ativo');
+            document.getElementById('areaResultados').classList.remove('ativo');
+        }
+    </script>
+</body>
+</html>
