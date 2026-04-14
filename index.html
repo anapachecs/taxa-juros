@@ -835,7 +835,7 @@ hr.sep { border: none; border-top: 1px solid var(--n200); margin: 22px 0; }
         <tr>
           <td><span class="bdg-a">Até julho/2024</span></td>
           <td><strong>1% a.m.</strong> ou <strong>SELIC</strong></td>
-          <td>Índice do tribunal (IGP-M, INPC, IPCA…)</td>
+          <td>Índice do tribunal (IGP-M, INPC, IPCA…) <em>ou</em> <strong>SELIC pura</strong> (juros + correção embutidos — entendimento STF/STJ)</td>
           <td>Depende da decisão do juiz / tribunal</td>
         </tr>
         <tr>
@@ -846,6 +846,11 @@ hr.sep { border: none; border-top: 1px solid var(--n200); margin: 22px 0; }
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="box-info" style="margin-top:14px">
+    <div class="rot-info">⚖️ SELIC Pura — entendimento STF (RE 1.558.191)</div>
+    <p>Quando o juiz ou tribunal opta pela <strong>SELIC como índice único</strong> (em vez de separar índice de correção + juros de 1% a.m.), a SELIC <strong>substitui integralmente</strong> a atualização monetária e os juros moratórios — evitando dupla contagem. Esse entendimento, consolidado pelo STF no RE 1.558.191 e pelo STJ no Tema 1.368, era a opção disponível até julho/2024. A partir de agosto/2024, a <strong>Lei nº 14.905/2024</strong> tornou obrigatória a fórmula IPCA (correção) + SELIC−IPCA (juros).</p>
   </div>
 
   <hr class="sep">
@@ -924,11 +929,12 @@ hr.sep { border: none; border-top: 1px solid var(--n200); margin: 22px 0; }
           <div class="campo-grp">
             <label class="campo-rot" for="f-indice">Índice de atualização monetária</label>
             <select class="f" id="f-indice">
-              <option value="tjdft">Índices TJDFT (INPC até 31/08/2024, IPCA a partir de 01/09/2024)</option>
+              <option value="misto-stf">⚖️ Misto automático — SELIC pura até jul/2024, IPCA + Taxa Legal a partir de ago/2024 (STF/Lei 14.905)</option>
+              <option value="tjdft">SELIC pura (todo o período) — conforme STF RE 1.558.191 · cobre juros + correção</option>
               <option value="ipca">IPCA (todo o período)</option>
               <option value="inpc">INPC (todo o período)</option>
               <option value="igpm">IGP-M (todo o período)</option>
-              <option value="selic-unica">SELIC como taxa única (juros + correção embutidos)</option>
+              <option value="selic-unica">SELIC como taxa única isolada (apenas correção, sem juros separados)</option>
             </select>
           </div>
         </div>
@@ -1269,7 +1275,7 @@ function executarCalculo(){
 
   var resultados=itens.map(function(item){
     var rc=calcCorrecao(item.di,dataFim,indOpc,item.principal);
-    var rj=calcJuros(item.di,dataFim,jTipo,jPct,item.principal,rc.corrigido);
+    var rj=calcJuros(item.di,dataFim,jTipo,jPct,item.principal,rc.corrigido,indOpc);
     var multa=0;
     if(mTipo==='pct') multa=item.principal*mVal;
     else if(mTipo==='monetaria') multa=parseFloat(document.getElementById('f-multa-valor').value)||0;
@@ -1282,25 +1288,33 @@ function executarCalculo(){
 function calcCorrecao(di,df,opc,principal){
   var fator=1,log=[],regimes=[],prem=[],anoA=di.getFullYear(),mesA=di.getMonth(),anoF=df.getFullYear(),mesF=df.getMonth();
   var NM=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],ultReg='';
+  var MARCO_LEI=new Date(2024,7,1);
   while(anoA<anoF||(anoA===anoF&&mesA<=mesF)){
     var dAt=new Date(anoA,mesA,1);
-    var tipo=opc==='tjdft'?(dAt<VIGENCIA?'inpc':'ipca'):opc;
+    var tipo;
+    if(opc==='misto-stf'){tipo=dAt<MARCO_LEI?'selic-unica':'ipca';}
+    else if(opc==='tjdft'){tipo='selic-unica';}
+    else{tipo=opc;}
     var tab=tipo==='ipca'?IPCA_AN:tipo==='inpc'?INPC_AN:tipo==='igpm'?IGPM_AN:tipo==='selic-unica'?SELIC_AN:IPCA_AN;
     var tm=mensal(getAn(tab,anoA));
     fator*=(1+tm);
-    var reg=tipo.toUpperCase();
+    var reg=tipo==='selic-unica'?'SELIC (taxa única)':tipo.toUpperCase();
     if(reg!==ultReg){regimes.push({mes:NM[mesA]+'/'+anoA,regime:reg});ultReg=reg;}
-    log.push(NM[mesA]+'/'+anoA+'  índice='+reg+'  taxa='+fmtPct(tm)+'  fator_acum='+fator.toFixed(8));
+    log.push(NM[mesA]+'/'+anoA+'  indice='+reg+'  taxa='+fmtPct(tm)+'  fator_acum='+fator.toFixed(8));
     mesA++;if(mesA>11){mesA=0;anoA++;}
   }
-  prem.push('Índice: '+(opc==='tjdft'?'TJDFT (INPC→IPCA em set/2024)':opc.toUpperCase()));
-  prem.push('Período: '+fmtData(di)+' a '+fmtData(df));
+  var descrOpc={'misto-stf':'Misto STF/Lei 14.905: SELIC pura ate jul/2024 + IPCA a partir de ago/2024','tjdft':'SELIC Pura integral (STF RE 1.558.191)'};
+  prem.push('Indice: '+(descrOpc[opc]||opc.toUpperCase()));
+  prem.push('Periodo: '+fmtData(di)+' a '+fmtData(df));
   prem.push('Fator acumulado: '+fator.toFixed(8));
-  prem.push('Variação: +'+((fator-1)*100).toFixed(4)+'%');
+  prem.push('Variacao: +'+((fator-1)*100).toFixed(4)+'%');
+  if(opc==='misto-stf'&&di<MARCO_LEI&&df>=MARCO_LEI){
+    prem.push('PERIODO MISTO: SELIC pura ate jul/2024 (juros+correcao embutidos); IPCA a partir de ago/2024 (juros separados pela Taxa Legal SELIC-IPCA).');
+  }
   return{fator:fator,corrigido:principal*fator,log:log,prem:prem,regimes:regimes};
 }
 
-function calcJuros(di,df,tipo,pct,principal,corrigido){
+function calcJuros(di,df,tipo,pct,principal,corrigido,indOpc){
   var log=[],regimes=[],prem=[],taxaT=0,NM=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
   if(tipo==='sem')return{juros:0,taxaT:0,log:[],prem:['Sem juros.'],regimes:[]};
   if(tipo==='fixo'){
@@ -1312,23 +1326,31 @@ function calcJuros(di,df,tipo,pct,principal,corrigido){
     return{juros:corrigido*taxaT,taxaT:taxaT,log:log,prem:prem,regimes:regimes};
   }
   // legal automático
+  var MARCO_LEI=new Date(2024,7,1); // ago/2024
   var L05=new Date(2003,0,10),L1=new Date(2024,7,30);
   var anoA=di.getFullYear(),mesA=di.getMonth(),anoF=df.getFullYear(),mesF=df.getMonth(),ultR='';
   while(anoA<anoF||(anoA===anoF&&mesA<=mesF)){
     var dAt=new Date(anoA,mesA,1),taxa,nr;
-    if(dAt<=L05){taxa=0.005;nr='0,5% a.m.';}
+    // misto-stf: antes de ago/2024 a SELIC já cobre juros+correção → juros = 0 nessa fase
+    if(indOpc==='misto-stf'&&dAt<MARCO_LEI){
+      taxa=0;nr='0% (SELIC cobre juros+corr.)';
+    } else if(dAt<=L05){taxa=0.005;nr='0,5% a.m.';}
     else if(dAt<L1){taxa=0.01;nr='1% a.m.';}
-    else{taxa=taxaLegalMens(anoA);nr='Taxa Legal SELIC−IPCA';}
+    else{taxa=taxaLegalMens(anoA);nr='Taxa Legal SELIC-IPCA';}
     taxaT+=taxa;
     if(nr!==ultR){regimes.push({mes:NM[mesA]+'/'+anoA,regime:nr});ultR=nr;}
     log.push(NM[mesA]+'/'+anoA+'  regime='+nr+'  taxa='+fmtPct(taxa)+'  soma_acum='+fmtPct(taxaT));
     mesA++;if(mesA>11){mesA=0;anoA++;}
   }
-  prem.push('Tipo: Juros legais automáticos por período');
-  prem.push('Regras: ≤10/01/2003 → 0,5% a.m. | 11/01/2003–29/08/2024 → 1% a.m. | ≥30/08/2024 → Taxa Legal SELIC−IPCA');
-  prem.push('Regime de juros SIMPLES (somatório mensal)');
+  prem.push('Tipo: Juros legais automaticos por periodo');
+  if(indOpc==='misto-stf'){
+    prem.push('Regras: ate jul/2024 → 0% (SELIC ja cobre tudo) | a partir de ago/2024 → Taxa Legal SELIC-IPCA (Lei 14.905/2024)');
+  } else {
+    prem.push('Regras: ≤10/01/2003 → 0,5% a.m. | 11/01/2003–29/08/2024 → 1% a.m. | ≥30/08/2024 → Taxa Legal SELIC-IPCA');
+  }
+  prem.push('Regime de juros SIMPLES (somatorio mensal)');
   prem.push('Taxa total: '+fmtPct(taxaT));
-  if(regimes.length>1)prem.push('⚠️ PERÍODO MISTO: regimes diferentes aplicados automaticamente por data.');
+  if(regimes.length>1)prem.push('PERIODO MISTO: regimes diferentes aplicados automaticamente por data.');
   return{juros:corrigido*taxaT,taxaT:taxaT,log:log,prem:prem,regimes:regimes};
 }
 
@@ -1366,8 +1388,11 @@ function renderizar(resultados,cfg){
     '</div>';
 
   var misto=resultados.some(function(r){return r.regJ&&r.regJ.length>1;});
-  if(misto){
-    html+='<div class="mem-alerta">⚠️ <strong>PERÍODO MISTO IDENTIFICADO:</strong> Este cálculo abrange o marco de vigência da Lei nº 14.905/2024 (30/08/2024). Foram aplicados regimes de juros diferentes antes e após esse marco, de forma automática conforme a lei.</div>';
+  var mistoStf=cfg.indice==='misto-stf'&&resultados.some(function(r){return r.di<new Date(2024,7,1)&&r.df>=new Date(2024,7,1);});
+  if(mistoStf){
+    html+='<div class="mem-alerta">⚖️ <strong>CALCULO MISTO STF / LEI 14.905/2024:</strong> Ate jul/2024 aplicada SELIC pura como taxa unica (juros + correcao embutidos, sem dupla contagem). A partir de ago/2024 aplicado IPCA como correcao + Taxa Legal SELIC-IPCA como juros, conforme a Lei 14.905/2024.</div>';
+  } else if(misto){
+    html+='<div class="mem-alerta">⚠️ <strong>PERIODO MISTO IDENTIFICADO:</strong> Este calculo abrange o marco de vigencia da Lei 14.905/2024 (30/08/2024). Foram aplicados regimes de juros diferentes antes e apos esse marco, de forma automatica conforme a lei. Quando selecionada a opcao SELIC Pura, a SELIC e utilizada como taxa unica de correcao em todo o periodo anterior.</div>';
   }
 
   resultados.forEach(function(r,i){
@@ -1413,7 +1438,7 @@ function gerarAudit(id,linhas,rotulo){
 }
 function toggleAudit(id){var el=document.getElementById(id);if(el)el.classList.toggle('on');}
 function mostrarErro(cid,msg){var el=document.getElementById(cid);el.innerHTML='<div class="msg-err">❌ '+msg+'</div>';el.classList.add('on');}
-function descrIndice(o){return{tjdft:'TJDFT (INPC até 31/08/2024, IPCA a partir de 01/09/2024)',ipca:'IPCA (todo o período)',inpc:'INPC (todo o período)',igpm:'IGP-M (todo o período)','selic-unica':'SELIC como taxa única'}[o]||o;}
+function descrIndice(o){return{'misto-stf':'Misto STF/Lei 14.905 — SELIC pura ate jul/2024 + IPCA a partir de ago/2024','tjdft':'SELIC Pura integral (STF RE 1.558.191)',ipca:'IPCA (todo o periodo)',inpc:'INPC (todo o periodo)',igpm:'IGP-M (todo o periodo)','selic-unica':'SELIC como taxa unica isolada (apenas correcao)'}[o]||o;}
 function descrJuros(tipo,pct){if(tipo==='sem')return'Sem juros';if(tipo==='fixo')return'Fixo '+(pct*100).toFixed(2)+'% a.m. (simples)';return'Legais automáticos (0,5% → 1% → Taxa Legal SELIC−IPCA por período)';}
 
 /* ════════════════════════════════════════════
