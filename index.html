@@ -3,1226 +3,1373 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Juros Legais e Correção Monetária — UFLA</title>
+<title>Atualização Monetária e Juros Legais — UFLA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --verde-escuro:  #1a3a2a;
-  --verde-medio:   #245c3e;
-  --verde-claro:   #2e7d52;
-  --dourado:       #c9a84c;
-  --dourado-claro: #e8c96a;
-  --creme:         #f5f0e8;
-  --creme-escuro:  #e8e0d0;
-  --texto:         #1a1a1a;
-  --texto-suave:   #4a4a4a;
-  --branco:        #ffffff;
-  --vermelho:      #c0392b;
-  --azul-info:     #1a4a6e;
-  --fonte-titulo:  'Playfair Display', Georgia, serif;
-  --fonte-corpo:   'Source Serif 4', Georgia, serif;
-  --fonte-mono:    'JetBrains Mono', 'Courier New', monospace;
-  --sombra:        0 2px 14px rgba(0,0,0,0.09);
-  --raio:          6px;
-  --raio-g:        12px;
+/* ════════ TOKENS ════════ */
+:root{
+  --vd:  #1a3a2a; /* verde escuro */
+  --vm:  #245c3e; /* verde médio */
+  --vc:  #2e7d52; /* verde claro */
+  --dou: #c9a84c; /* dourado */
+  --doc: #e8c96a; /* dourado claro */
+  --cr:  #f5f0e8; /* creme */
+  --cre: #ede5d5; /* creme escuro */
+  --txt: #1c1c1c;
+  --ts:  #4a4a4a; /* texto suave */
+  --br:  #ffffff;
+  --vm2: #c0392b; /* vermelho */
+  --az:  #1a4a6e; /* azul info */
+  --az2: #0d2b47;
+  --fn-t:'Playfair Display',Georgia,serif;
+  --fn-b:'Source Serif 4',Georgia,serif;
+  --fn-m:'JetBrains Mono','Courier New',monospace;
+  --sh: 0 2px 16px rgba(0,0,0,.09);
+  --r: 6px;
+  --rg:12px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--fonte-corpo);font-size:16px;line-height:1.7;color:var(--texto);background:var(--creme);min-height:100vh}
+body{font-family:var(--fn-b);font-size:15.5px;line-height:1.72;color:var(--txt);background:var(--cr);min-height:100vh}
 
-/* ── CABEÇALHO ── */
-.cab{background:var(--verde-escuro);color:var(--creme);padding:26px 20px 22px;border-bottom:3px solid var(--dourado);position:relative;overflow:hidden}
-.cab::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border:40px solid rgba(201,168,76,.07);border-radius:50%;pointer-events:none}
-.cab-in{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.cab-txt{flex:1;min-width:200px}
-.cab-h1{font-family:var(--fonte-titulo);font-size:clamp(1.2rem,3vw,1.7rem);font-weight:700;color:var(--dourado-claro);line-height:1.2}
-.cab-sub{font-size:.84rem;color:rgba(245,240,232,.72);margin-top:4px;font-style:italic}
-.cab-meta{font-size:.76rem;color:rgba(245,240,232,.55);margin-top:7px;display:flex;gap:18px;flex-wrap:wrap}
+/* ════════ HEADER ════════ */
+.header{background:var(--vd);color:var(--cr);padding:22px 20px 20px;border-bottom:3px solid var(--dou);position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border:38px solid rgba(201,168,76,.07);border-radius:50%}
+.header-in{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.header-txt{flex:1;min-width:200px}
+.h-title{font-family:var(--fn-t);font-size:clamp(1.15rem,2.8vw,1.65rem);font-weight:700;color:var(--doc);line-height:1.2}
+.h-sub{font-size:.82rem;color:rgba(245,240,232,.7);margin-top:3px;font-style:italic}
+.h-meta{font-size:.74rem;color:rgba(245,240,232,.52);margin-top:6px;display:flex;gap:16px;flex-wrap:wrap}
+.h-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);border-radius:4px;padding:2px 8px;font-family:var(--fn-m);font-size:.65rem;color:var(--doc);margin-top:8px;letter-spacing:.04em}
 
-/* ── NAVEGAÇÃO ── */
-.nav-abas{background:var(--verde-escuro);border-bottom:1px solid rgba(201,168,76,.28);position:sticky;top:0;z-index:100}
-.nav-lista{max-width:920px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
-.nav-lista::-webkit-scrollbar{display:none}
-.btn-aba{padding:11px 16px;background:none;border:none;color:rgba(245,240,232,.55);font-family:var(--fonte-corpo);font-size:.79rem;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;letter-spacing:.02em}
-.btn-aba:hover{color:var(--dourado-claro)}
-.btn-aba.ativa{color:var(--dourado-claro);border-bottom-color:var(--dourado)}
-.n-aba{font-family:var(--fonte-mono);font-size:.63rem;opacity:.68;margin-right:4px}
+/* ════════ NAV ════════ */
+.nav{background:var(--vd);border-bottom:1px solid rgba(201,168,76,.25);position:sticky;top:0;z-index:200}
+.nav-in{max-width:960px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.tab{padding:11px 15px;background:none;border:none;color:rgba(245,240,232,.52);font-family:var(--fn-b);font-size:.78rem;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .18s;letter-spacing:.02em}
+.tab:hover{color:var(--doc)}
+.tab.on{color:var(--doc);border-bottom-color:var(--dou)}
+.nt{font-family:var(--fn-m);font-size:.61rem;opacity:.65;margin-right:4px}
 
-/* ── LAYOUT ── */
-.principal{max-width:920px;margin:0 auto;padding:30px 16px 60px}
-.secao{display:none}
-.secao.vis{display:block}
+/* ════════ MAIN ════════ */
+.main{max-width:960px;margin:0 auto;padding:28px 16px 60px}
+.pg{display:none}
+.pg.on{display:block}
 
-/* ── TIPOGRAFIA ── */
-.tit-sec{font-family:var(--fonte-titulo);font-size:clamp(1.25rem,4vw,1.75rem);color:var(--verde-escuro);margin-bottom:6px;line-height:1.25}
-.linha-dec{width:56px;height:3px;background:var(--dourado);margin-bottom:22px}
-.sub-sec{font-size:1rem;color:var(--texto-suave);margin-bottom:26px;font-style:italic}
+/* ════════ TYPO ════════ */
+.stit{font-family:var(--fn-t);font-size:clamp(1.2rem,3.5vw,1.7rem);color:var(--vd);margin-bottom:5px;line-height:1.25}
+.dec{width:52px;height:3px;background:var(--dou);margin-bottom:20px}
+.sub{font-size:.98rem;color:var(--ts);margin-bottom:24px;font-style:italic}
+h3.blk{font-family:var(--fn-t);font-size:1.08rem;color:var(--vd);margin:22px 0 10px}
 
-/* ── BLOCOS DE CONTEÚDO ── */
-.bloco-teoria{background:var(--verde-escuro);color:var(--creme);border-radius:var(--raio-g);padding:22px 26px;margin-bottom:22px;position:relative;overflow:hidden}
-.bloco-teoria::before{content:'§';position:absolute;right:18px;top:8px;font-family:var(--fonte-titulo);font-size:5rem;color:rgba(201,168,76,.09);pointer-events:none}
-.bloco-teoria h3{font-family:var(--fonte-titulo);font-size:1.08rem;color:var(--dourado-claro);margin-bottom:11px}
-.bloco-teoria p{font-size:.91rem;line-height:1.78;margin-bottom:9px}
-.bloco-teoria p:last-child{margin-bottom:0}
-.bloco-teoria strong{color:var(--dourado-claro)}
-.bloco-teoria em{color:rgba(245,240,232,.8)}
-.bloco-teoria ul{margin:8px 0 8px 20px;font-size:.9rem;line-height:1.9}
+/* ════════ CARDS CONTEÚDO ════════ */
+.box-teoria{background:var(--vd);color:var(--cr);border-radius:var(--rg);padding:20px 24px;margin-bottom:20px;position:relative;overflow:hidden}
+.box-teoria::before{content:'§';position:absolute;right:16px;top:6px;font-family:var(--fn-t);font-size:4.5rem;color:rgba(201,168,76,.09);pointer-events:none}
+.box-teoria h3{font-family:var(--fn-t);font-size:1.05rem;color:var(--doc);margin-bottom:10px}
+.box-teoria p{font-size:.9rem;line-height:1.8;margin-bottom:8px}
+.box-teoria p:last-child{margin-bottom:0}
+.box-teoria strong{color:var(--doc)}
+.box-teoria em{color:rgba(245,240,232,.78)}
+.box-teoria ul{margin:8px 0 8px 18px;font-size:.89rem;line-height:2}
 
-.bloco-lei{border:1px solid var(--dourado);border-left:4px solid var(--dourado);background:rgba(201,168,76,.06);border-radius:var(--raio);padding:15px 18px;margin-bottom:18px;font-size:.89rem;color:var(--texto-suave)}
-.rot-lei{font-family:var(--fonte-mono);font-size:.7rem;color:var(--dourado);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.box-lei{border:1px solid var(--dou);border-left:4px solid var(--dou);background:rgba(201,168,76,.06);border-radius:var(--r);padding:14px 17px;margin-bottom:16px;font-size:.88rem;color:var(--ts)}
+.rot-lei{font-family:var(--fn-m);font-size:.68rem;color:var(--dou);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
 
-.bloco-eq{background:#0d1f14;border-radius:var(--raio);padding:18px 22px;margin:14px 0;overflow-x:auto}
-.eq-titulo{font-family:var(--fonte-mono);font-size:.67rem;color:rgba(201,168,76,.65);text-transform:uppercase;letter-spacing:.1em;margin-bottom:9px}
-.eq-formula{font-family:var(--fonte-mono);font-size:clamp(.8rem,2.2vw,.98rem);color:#a8d8a8;line-height:2.1;white-space:pre-wrap}
-.eq-desc{font-family:var(--fonte-mono);font-size:.74rem;color:rgba(168,216,168,.58);margin-top:9px;line-height:1.85}
+.box-eq{background:#0c1d12;border-radius:var(--r);padding:16px 20px;margin:13px 0;overflow-x:auto;border:1px solid rgba(46,125,82,.4)}
+.eq-tit{font-family:var(--fn-m);font-size:.65rem;color:rgba(201,168,76,.62);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.eq-f{font-family:var(--fn-m);font-size:clamp(.79rem,2vw,.95rem);color:#b2e0b2;line-height:2.1;white-space:pre-wrap}
+.eq-desc{font-family:var(--fn-m);font-size:.73rem;color:rgba(178,224,178,.55);margin-top:8px;line-height:1.88}
 
-.bloco-curiosidade{background:rgba(26,74,110,.07);border:1px solid rgba(26,74,110,.18);border-radius:var(--raio);padding:15px 18px;margin-bottom:18px;position:relative}
-.bloco-curiosidade::before{content:'💡';position:absolute;top:-10px;left:14px;font-size:1.15rem}
-.rot-cur{font-family:var(--fonte-mono);font-size:.69rem;color:var(--azul-info);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;padding-top:3px}
-.bloco-curiosidade p{font-size:.87rem;color:var(--azul-info);line-height:1.72}
-.bloco-curiosidade strong{color:#0d2b47}
+.box-dest{background:rgba(201,168,76,.11);border:1px solid rgba(201,168,76,.38);border-radius:var(--r);padding:13px 17px;margin-bottom:16px;font-size:.89rem;color:var(--vd)}
+.box-dest strong{color:var(--vd)}
 
-.bloco-aviso{background:rgba(192,57,43,.07);border:1px solid rgba(192,57,43,.22);border-radius:var(--raio);padding:13px 17px;margin-bottom:18px;font-size:.84rem;color:var(--vermelho)}
+.box-aviso{background:rgba(192,57,43,.07);border:1px solid rgba(192,57,43,.22);border-radius:var(--r);padding:12px 16px;margin-bottom:16px;font-size:.83rem;color:var(--vm2)}
 
-.bloco-destaque{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.4);border-radius:var(--raio);padding:15px 18px;margin-bottom:18px;font-size:.9rem;color:var(--verde-escuro)}
-.bloco-destaque strong{color:var(--verde-escuro)}
+.box-info{background:rgba(26,74,110,.07);border:1px solid rgba(26,74,110,.17);border-radius:var(--r);padding:14px 17px;margin-bottom:16px;position:relative}
+.box-info::before{content:'💡';position:absolute;top:-9px;left:13px;font-size:1.1rem}
+.rot-info{font-family:var(--fn-m);font-size:.67rem;color:var(--az);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;padding-top:3px}
+.box-info p{font-size:.86rem;color:var(--az);line-height:1.72}
+.box-info strong{color:var(--az2)}
 
-/* ── CALCULADORA ── */
-.card-calc{background:var(--branco);border:1px solid var(--creme-escuro);border-radius:var(--raio-g);box-shadow:var(--sombra);overflow:hidden;margin-top:26px}
-.calc-cab{background:var(--verde-medio);padding:14px 22px}
-.calc-tit{font-family:var(--fonte-titulo);font-size:1.03rem;color:var(--creme)}
-.calc-corpo{padding:22px}
-.grupo{margin-bottom:18px}
-.rot{display:block;font-size:.8rem;font-weight:600;color:var(--verde-escuro);margin-bottom:5px;letter-spacing:.03em;text-transform:uppercase}
-.rot-dica{display:block;font-size:.76rem;font-weight:400;color:var(--texto-suave);text-transform:none;letter-spacing:0;margin-top:2px}
-textarea.campo,input.campo,select.campo{width:100%;border:1.5px solid var(--creme-escuro);border-radius:var(--raio);padding:9px 13px;font-family:var(--fonte-mono);font-size:.87rem;color:var(--texto);background:var(--creme);transition:border-color .2s;outline:none;-webkit-appearance:none}
-textarea.campo{resize:vertical;min-height:86px}
-textarea.campo:focus,input.campo:focus,select.campo:focus{border-color:var(--verde-claro);background:var(--branco)}
-select.campo{cursor:pointer}
-.grade-datas{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:480px){.grade-datas{grid-template-columns:1fr}}
-.linha-btns{display:flex;gap:9px;flex-wrap:wrap;margin-top:4px}
-.btn-calc{background:var(--verde-escuro);color:var(--dourado-claro);border:none;border-radius:var(--raio);padding:11px 26px;font-family:var(--fonte-corpo);font-size:.88rem;font-weight:600;cursor:pointer;transition:background .2s,transform .1s;letter-spacing:.02em}
-.btn-calc:hover{background:var(--verde-medio)}
+/* ════════ GRID CONCEITUAL ════════ */
+.grid-conceito{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+@media(max-width:580px){.grid-conceito{grid-template-columns:1fr}}
+.card-conc{border-radius:var(--rg);padding:18px 20px}
+.card-conc.azul{background:var(--az);color:#fff}
+.card-conc.verde{background:var(--vd);color:var(--cr)}
+.card-conc h4{font-family:var(--fn-t);font-size:1rem;margin-bottom:10px}
+.card-conc ul{list-style:none;font-size:.84rem;line-height:2.1}
+.card-conc ul li::before{content:'› ';font-weight:700;opacity:.75}
+.card-conc.azul strong{color:#a8d8ff}
+.card-conc.verde strong{color:var(--doc)}
+
+/* ════════ TABELA REGIME ════════ */
+.wrap-tab{overflow-x:auto;margin:16px 0}
+.tab-reg{width:100%;border-collapse:collapse;font-size:.86rem;min-width:500px}
+.tab-reg th{background:var(--vd);color:var(--doc);padding:9px 13px;text-align:left;font-family:var(--fn-m);font-size:.7rem;letter-spacing:.05em}
+.tab-reg td{padding:9px 13px;border-bottom:1px solid var(--cre);vertical-align:top;line-height:1.6}
+.tab-reg tr:nth-child(even) td{background:rgba(26,58,42,.03)}
+.tab-reg tr:last-child td{border-bottom:none}
+.bdg-a{background:rgba(26,58,42,.12);color:var(--vd);font-size:.67rem;font-family:var(--fn-m);padding:2px 7px;border-radius:3px}
+.bdg-d{background:var(--dou);color:var(--vd);font-size:.67rem;font-family:var(--fn-m);padding:2px 7px;border-radius:3px}
+
+/* ════════ FORMULÁRIO DE CÁLCULO ════════ */
+.form-card{background:var(--br);border:1px solid var(--cre);border-radius:var(--rg);box-shadow:var(--sh);overflow:hidden;margin-bottom:24px}
+.form-head{background:var(--vm);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.form-head-tit{font-family:var(--fn-t);font-size:1rem;color:var(--cr)}
+.form-head-badge{font-family:var(--fn-m);font-size:.65rem;background:rgba(255,255,255,.15);color:var(--doc);padding:3px 9px;border-radius:3px;border:1px solid rgba(201,168,76,.4)}
+.form-body{padding:20px 22px}
+
+.sec-form{margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--cre)}
+.sec-form:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.sec-form-tit{font-family:var(--fn-m);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--vm);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.sec-form-tit::before{content:'';display:block;width:16px;height:2px;background:var(--dou)}
+
+.campo-grp{margin-bottom:14px}
+.campo-rot{display:block;font-size:.78rem;font-weight:600;color:var(--vd);margin-bottom:4px;letter-spacing:.03em;text-transform:uppercase}
+.campo-dica{display:block;font-size:.74rem;font-weight:400;color:var(--ts);text-transform:none;letter-spacing:0;margin-top:1px}
+input.f,select.f,textarea.f{width:100%;border:1.5px solid var(--cre);border-radius:var(--r);padding:8px 12px;font-family:var(--fn-m);font-size:.86rem;color:var(--txt);background:var(--cr);transition:border-color .18s,background .18s;outline:none;-webkit-appearance:none}
+input.f:focus,select.f:focus,textarea.f:focus{border-color:var(--vc);background:var(--br)}
+select.f{cursor:pointer}
+textarea.f{resize:vertical;min-height:60px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:520px){.grid2,.grid3{grid-template-columns:1fr}}
+
+/* ════════ VALORES DINÂMICOS ════════ */
+.valores-lista{margin-top:8px}
+.valor-row{display:grid;grid-template-columns:1fr 1fr 2fr auto;gap:10px;align-items:end;margin-bottom:10px;padding:12px 14px;background:var(--cr);border:1px solid var(--cre);border-radius:var(--r)}
+@media(max-width:620px){.valor-row{grid-template-columns:1fr 1fr;row-gap:8px}}
+.btn-rm{background:rgba(192,57,43,.1);color:var(--vm2);border:1px solid rgba(192,57,43,.25);border-radius:var(--r);padding:7px 11px;font-family:var(--fn-m);font-size:.75rem;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-rm:hover{background:var(--vm2);color:#fff}
+.btn-add{background:none;color:var(--vc);border:1.5px dashed rgba(46,125,82,.4);border-radius:var(--r);padding:8px 16px;font-family:var(--fn-b);font-size:.84rem;cursor:pointer;transition:all .15s;margin-top:4px;display:flex;align-items:center;gap:6px;width:100%;justify-content:center}
+.btn-add:hover{background:rgba(46,125,82,.06);border-color:var(--vc)}
+
+/* ════════ BOTÕES PRINCIPAIS ════════ */
+.btns-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.btn-calc{background:var(--vd);color:var(--doc);border:none;border-radius:var(--r);padding:11px 28px;font-family:var(--fn-b);font-size:.88rem;font-weight:600;cursor:pointer;transition:background .18s,transform .1s;letter-spacing:.02em}
+.btn-calc:hover{background:var(--vm)}
 .btn-calc:active{transform:scale(.98)}
-.btn-limpar{background:none;color:var(--texto-suave);border:1.5px solid var(--creme-escuro);border-radius:var(--raio);padding:11px 18px;font-family:var(--fonte-corpo);font-size:.86rem;cursor:pointer;transition:border-color .2s}
-.btn-limpar:hover{border-color:var(--texto-suave)}
+.btn-sec{background:none;color:var(--ts);border:1.5px solid var(--cre);border-radius:var(--r);padding:10px 18px;font-family:var(--fn-b);font-size:.85rem;cursor:pointer;transition:border-color .18s}
+.btn-sec:hover{border-color:var(--ts)}
 
-/* ── RESULTADOS ── */
-.area-res{margin-top:22px;display:none}
-.area-res.vis{display:block}
-.tabela-wrap{overflow-x:auto;margin:14px 0}
-.tabela-res{width:100%;border-collapse:collapse;font-size:.87rem;min-width:460px}
-.tabela-res th{background:var(--verde-escuro);color:var(--dourado-claro);padding:9px 13px;text-align:left;font-family:var(--fonte-mono);font-size:.73rem;letter-spacing:.06em;font-weight:600;text-transform:uppercase}
-.tabela-res td{padding:9px 13px;border-bottom:1px solid var(--creme-escuro);vertical-align:middle}
-.tabela-res tr:last-child td{border-bottom:none}
-.tabela-res tr:hover td{background:var(--creme)}
-.v-orig{font-family:var(--fonte-mono);color:var(--texto-suave)}
-.v-final{font-family:var(--fonte-mono);font-weight:600;color:var(--verde-escuro)}
-.v-acr{font-family:var(--fonte-mono);color:var(--verde-claro)}
-.v-fat{font-family:var(--fonte-mono);font-size:.79rem;color:var(--texto-suave)}
+/* ════════ RESULTADO ════════ */
+.result-area{display:none;margin-top:24px}
+.result-area.on{display:block}
 
-.resumo-calc{background:var(--verde-escuro);color:var(--creme);border-radius:var(--raio);padding:16px 20px;margin-bottom:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.res-tit{font-family:var(--fonte-mono);font-size:.67rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(245,240,232,.52);margin-bottom:3px}
-.res-val{font-family:var(--fonte-mono);font-size:.97rem;color:var(--dourado-claro);font-weight:600}
+.result-header{background:var(--vd);border-radius:var(--rg) var(--rg) 0 0;padding:16px 20px}
+.result-header-tit{font-family:var(--fn-t);font-size:1.1rem;color:var(--doc);margin-bottom:4px}
+.result-header-sub{font-family:var(--fn-m);font-size:.72rem;color:rgba(245,240,232,.5)}
 
-/* ── AUDITORIA ── */
-.btn-audit{background:none;border:1px solid rgba(26,58,42,.18);border-radius:var(--raio);padding:7px 14px;font-family:var(--fonte-mono);font-size:.73rem;color:var(--texto-suave);cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;margin-top:6px}
-.btn-audit:hover{background:var(--creme-escuro);color:var(--verde-escuro)}
-.bloco-audit{background:#0d1f14;border-radius:var(--raio);padding:16px 18px;margin-top:9px;overflow-x:auto;display:none}
-.bloco-audit.vis{display:block}
-.audit-tit{font-family:var(--fonte-mono);font-size:.67rem;color:rgba(201,168,76,.65);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
-.audit-lin{font-family:var(--fonte-mono);font-size:.77rem;color:rgba(168,216,168,.8);line-height:1.92;white-space:pre-wrap;word-break:break-word}
+.resumo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0;border:1px solid var(--cre);border-top:none}
+.resumo-item{padding:13px 16px;border-right:1px solid var(--cre);background:var(--br)}
+.resumo-item:last-child{border-right:none}
+.resumo-item-tit{font-family:var(--fn-m);font-size:.64rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ts);margin-bottom:3px}
+.resumo-item-val{font-family:var(--fn-m);font-size:.97rem;color:var(--vd);font-weight:600}
 
-/* ── TABELA REGIMES ── */
-.tabela-regimes-wrap{overflow-x:auto;margin:18px 0}
-.tabela-regimes{width:100%;border-collapse:collapse;font-size:.86rem;min-width:520px}
-.tabela-regimes th{background:var(--verde-escuro);color:var(--dourado-claro);padding:10px 14px;text-align:left;font-family:var(--fonte-mono);font-size:.72rem;letter-spacing:.05em}
-.tabela-regimes td{padding:10px 14px;border-bottom:1px solid var(--creme-escuro);vertical-align:top;line-height:1.6}
-.tabela-regimes tr:nth-child(even) td{background:rgba(26,58,42,.03)}
-.tabela-regimes tr:last-child td{border-bottom:none}
-.badge-antes{background:rgba(26,58,42,.12);color:var(--verde-escuro);font-size:.68rem;font-family:var(--fonte-mono);padding:2px 7px;border-radius:3px;white-space:nowrap}
-.badge-depois{background:var(--dourado);color:var(--verde-escuro);font-size:.68rem;font-family:var(--fonte-mono);padding:2px 7px;border-radius:3px;white-space:nowrap}
+/* ════════ MEMÓRIA DE CÁLCULO ════════ */
+.memoria{background:var(--br);border:1px solid var(--cre);border-top:none;padding:18px 20px}
+.memoria-tit{font-family:var(--fn-m);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--vm);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.memoria-tit::before{content:'';display:block;width:12px;height:2px;background:var(--dou)}
+.mem-secao{margin-bottom:14px;padding:12px 14px;background:var(--cr);border-radius:var(--r);border-left:3px solid var(--dou)}
+.mem-sec-tit{font-family:var(--fn-m);font-size:.67rem;text-transform:uppercase;letter-spacing:.07em;color:var(--dou);margin-bottom:7px}
+.mem-linha{font-family:var(--fn-m);font-size:.78rem;color:var(--ts);line-height:1.9;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.mem-linha strong{color:var(--txt)}
+.mem-linha .mem-tag{background:var(--vd);color:var(--doc);font-size:.62rem;padding:1px 6px;border-radius:3px}
+.mem-formula{background:#0c1d12;border-radius:var(--r);padding:10px 14px;margin:6px 0;font-family:var(--fn-m);font-size:.78rem;color:#b2e0b2;line-height:1.9;overflow-x:auto;white-space:pre-wrap}
+.mem-alerta{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:var(--r);padding:8px 12px;font-family:var(--fn-m);font-size:.74rem;color:var(--vd);margin:8px 0}
 
-/* ── COMPARATIVO ── */
-.grade-comp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
-@media(max-width:600px){.grade-comp{grid-template-columns:1fr}}
-.card-regime{background:var(--branco);border:1px solid var(--creme-escuro);border-radius:var(--raio-g);padding:16px;box-shadow:var(--sombra)}
-.reg-rot{font-family:var(--fonte-mono);font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--texto-suave);margin-bottom:5px}
-.reg-tit{font-family:var(--fonte-titulo);font-size:.93rem;color:var(--verde-escuro);margin-bottom:12px;line-height:1.3}
-.reg-val{font-family:var(--fonte-mono);font-size:1.28rem;font-weight:600;color:var(--verde-escuro);margin-bottom:3px}
-.reg-acr{font-family:var(--fonte-mono);font-size:.78rem;color:var(--verde-claro)}
-.reg-fat{font-family:var(--fonte-mono);font-size:.73rem;color:var(--texto-suave);margin-top:5px}
+/* ════════ TABELA DE RESULTADOS ════════ */
+.wrap-res{overflow-x:auto;margin:14px 0}
+.tab-res{width:100%;border-collapse:collapse;font-size:.84rem;min-width:600px}
+.tab-res th{background:var(--vd);color:var(--doc);padding:9px 13px;text-align:left;font-family:var(--fn-m);font-size:.7rem;letter-spacing:.05em;font-weight:600;text-transform:uppercase}
+.tab-res td{padding:9px 13px;border-bottom:1px solid var(--cre);vertical-align:top;line-height:1.55}
+.tab-res tr:hover td{background:#fafaf8}
+.tab-res tr.total-row td{border-top:2px solid var(--cre);font-weight:700;background:rgba(26,58,42,.04)}
+.tab-res tr:last-child td{border-bottom:none}
+.mf{font-family:var(--fn-m)}
+.vv{font-family:var(--fn-m);font-weight:600;color:var(--vd)}
+.va{font-family:var(--fn-m);color:var(--vc)}
+.vs{font-family:var(--fn-m);font-size:.79rem;color:var(--ts)}
 
-/* ── LINHA DO TEMPO ── */
-.timeline{position:relative;padding-left:26px;margin:18px 0}
-.timeline::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(to bottom,var(--verde-claro),var(--dourado))}
-.ev{position:relative;margin-bottom:18px}
-.ev::before{content:'';position:absolute;left:-22px;top:6px;width:10px;height:10px;background:var(--dourado);border-radius:50%;border:2px solid var(--branco)}
-.ev-ano{font-family:var(--fonte-mono);font-size:.71rem;color:var(--dourado);text-transform:uppercase;letter-spacing:.08em}
-.ev-desc{font-size:.89rem;color:var(--texto);line-height:1.6}
+/* ════════ AUDITORIA ════════ */
+.btn-audit{background:none;border:1px solid rgba(26,58,42,.18);border-radius:var(--r);padding:7px 13px;font-family:var(--fn-m);font-size:.72rem;color:var(--ts);cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:5px;margin:4px 4px 0 0}
+.btn-audit:hover{background:var(--cre);color:var(--vd)}
+.bloco-audit{background:#0c1d12;border-radius:var(--r);padding:14px 16px;margin-top:8px;overflow-x:auto;display:none;border:1px solid rgba(46,125,82,.3)}
+.bloco-audit.on{display:block}
+.audit-tit{font-family:var(--fn-m);font-size:.64rem;color:rgba(201,168,76,.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.audit-lin{font-family:var(--fn-m);font-size:.75rem;color:rgba(178,224,178,.8);line-height:1.95;white-space:pre-wrap;word-break:break-word}
 
-/* ── VISÃO GERAL ── */
-.grade-vg{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:22px 0}
-@media(max-width:600px){.grade-vg{grid-template-columns:1fr}}
-.card-vg{border-radius:var(--raio-g);padding:18px}
-.card-vg.antes{background:#1a3a2a;color:var(--creme)}
-.card-vg.depois{background:var(--dourado);color:var(--verde-escuro)}
-.card-vg h3{font-family:var(--fonte-titulo);font-size:1.02rem;margin-bottom:11px}
-.card-vg ul{list-style:none;font-size:.84rem;line-height:2.05}
-.card-vg ul li::before{content:'→ ';font-weight:700}
+/* ════════ BADGE REGIME ════════ */
+.regime-badge{display:inline-flex;align-items:center;gap:5px;border-radius:4px;padding:4px 10px;font-family:var(--fn-m);font-size:.68rem;letter-spacing:.04em;margin-bottom:10px}
+.regime-badge.antes{background:rgba(26,58,42,.1);color:var(--vd);border:1px solid rgba(26,58,42,.2)}
+.regime-badge.depois{background:rgba(201,168,76,.15);color:var(--vd);border:1px solid rgba(201,168,76,.4)}
 
-/* ── ERRO ── */
-.msg-erro{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.28);border-radius:var(--raio);padding:11px 15px;color:var(--vermelho);font-size:.87rem;margin-top:14px}
+/* ════════ TIMELINE ════════ */
+.timeline{position:relative;padding-left:24px;margin:16px 0}
+.timeline::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:linear-gradient(to bottom,var(--vc),var(--dou))}
+.ev{position:relative;margin-bottom:16px}
+.ev::before{content:'';position:absolute;left:-20px;top:6px;width:9px;height:9px;background:var(--dou);border-radius:50%;border:2px solid var(--cr)}
+.ev-ano{font-family:var(--fn-m);font-size:.69rem;color:var(--dou);text-transform:uppercase;letter-spacing:.08em}
+.ev-desc{font-size:.88rem;color:var(--txt);line-height:1.6}
 
-/* ── SEPARADOR ── */
-hr.sep{border:none;border-top:1px solid var(--creme-escuro);margin:26px 0}
+/* ════════ ERRO ════════ */
+.msg-err{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.25);border-radius:var(--r);padding:10px 14px;color:var(--vm2);font-size:.86rem;margin-top:12px}
 
-/* ── RODAPÉ ── */
-.rodape{background:var(--verde-escuro);color:rgba(245,240,232,.52);text-align:center;padding:22px 16px;font-size:.77rem;line-height:1.85;border-top:2px solid var(--dourado)}
-.rodape strong{color:var(--dourado-claro)}
+hr.sep{border:none;border-top:1px solid var(--cre);margin:24px 0}
+
+/* ════════ FOOTER ════════ */
+.footer{background:var(--vd);color:rgba(245,240,232,.5);text-align:center;padding:20px 16px;font-size:.75rem;line-height:1.85;border-top:2px solid var(--dou)}
+.footer strong{color:var(--doc)}
 </style>
 </head>
 <body>
 
-<!-- ═══════════ CABEÇALHO ═══════════ -->
-<header class="cab">
-  <div class="cab-in">
+<!-- ════════ HEADER ════════ -->
+<header class="header">
+  <div class="header-in">
     <div>
-      <svg width="68" height="68" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logomarca UFLA">
-        <path d="M36 4 L64 16 L64 42 Q64 58 36 68 Q8 58 8 42 L8 16 Z" fill="#245c3e" stroke="#c9a84c" stroke-width="2"/>
+      <svg width="62" height="62" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M36 4L64 16L64 42Q64 58 36 68Q8 58 8 42L8 16Z" fill="#245c3e" stroke="#c9a84c" stroke-width="2"/>
         <text x="50%" y="40" dominant-baseline="middle" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="16" fill="#e8c96a" letter-spacing="1">UFLA</text>
-        <path d="M16 52 Q36 58 56 52 L56 56 Q36 62 16 56 Z" fill="#c9a84c"/>
-        <circle cx="22" cy="25" r="2" fill="#c9a84c" opacity="0.6"/>
-        <circle cx="50" cy="25" r="2" fill="#c9a84c" opacity="0.6"/>
-        <circle cx="36" cy="18" r="2.5" fill="#e8c96a"/>
+        <path d="M16 52Q36 58 56 52L56 56Q36 62 16 56Z" fill="#c9a84c"/>
+        <circle cx="22" cy="25" r="1.8" fill="#c9a84c" opacity=".55"/>
+        <circle cx="50" cy="25" r="1.8" fill="#c9a84c" opacity=".55"/>
+        <circle cx="36" cy="18" r="2.4" fill="#e8c96a"/>
       </svg>
     </div>
-    <div class="cab-txt">
-      <h1 class="cab-h1">Juros Legais e Correção Monetária</h1>
-      <p class="cab-sub">Novo Regime Jurídico — Lei nº 14.905, de 28 de junho de 2024</p>
-      <div class="cab-meta">
-        <span>🏛 Universidade Federal de Lavras — UFLA</span>
-        <span>⚖️ Faculdade de Direito</span>
+    <div class="header-txt">
+      <h1 class="h-title">Cálculo de Atualização Monetária e Juros</h1>
+      <p class="h-sub">Lei nº 14.905/2024 · Resolução CMN nº 5.171/2024 · Nível Tribunal</p>
+      <div class="h-meta">
+        <span>🏛 Universidade Federal de Lavras — UFLA · Faculdade de Direito</span>
       </div>
-      <div class="cab-meta" style="margin-top:4px">
+      <div class="h-meta" style="margin-top:4px">
         <span>👨‍🏫 Professor: [nome do professor]</span>
         <span>✍️ Autores: [nomes dos autores]</span>
+      </div>
+      <div style="margin-top:8px">
+        <span class="h-badge">⚡ SELIC mar/2026: 14,75% a.a.</span>
+        <span class="h-badge" style="margin-left:6px">📊 IPCA mar/2026: 0,88% a.m.</span>
+        <span class="h-badge" style="margin-left:6px">📐 Taxa Legal mar/2026: ≈ 0,33% a.m.</span>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ═══════════ NAVEGAÇÃO ═══════════ -->
-<nav class="nav-abas" role="navigation" aria-label="Módulos">
-  <div class="nav-lista">
-    <button class="btn-aba ativa" onclick="alternarAba('visao-geral',this)"><span class="n-aba">§ 00</span>Visão Geral</button>
-    <button class="btn-aba" onclick="alternarAba('regime-anterior',this)"><span class="n-aba">§ 01</span>Regime Anterior</button>
-    <button class="btn-aba" onclick="alternarAba('novo-regime',this)"><span class="n-aba">§ 02</span>Novo Regime (Lei 14.905)</button>
-    <button class="btn-aba" onclick="alternarAba('calc-anterior',this)"><span class="n-aba">§ 03</span>Calculadora — Antes</button>
-    <button class="btn-aba" onclick="alternarAba('calc-novo',this)"><span class="n-aba">§ 04</span>Calculadora — Novo Regime</button>
-    <button class="btn-aba" onclick="alternarAba('comparativo',this)"><span class="n-aba">§ 05</span>Comparativo</button>
+<!-- ════════ NAV ════════ -->
+<nav class="nav">
+  <div class="nav-in">
+    <button class="tab on" onclick="irPara('pg-intro',this)"><span class="nt">01</span>Introdução</button>
+    <button class="tab" onclick="irPara('pg-calculadora',this)"><span class="nt">02</span>Calculadora</button>
+    <button class="tab" onclick="irPara('pg-antes',this)"><span class="nt">03</span>Regime Anterior</button>
+    <button class="tab" onclick="irPara('pg-depois',this)"><span class="nt">04</span>Lei 14.905/2024</button>
   </div>
 </nav>
 
-<main class="principal">
+<main class="main">
 
-<!-- ══════════════════════════════════════════════════
-     § 00 — VISÃO GERAL
-══════════════════════════════════════════════════ -->
-<section class="secao vis" id="visao-geral">
-  <h2 class="tit-sec">Visão Geral do Sistema</h2>
-  <div class="linha-dec"></div>
-  <p class="sub-sec">Contextualização didática da mudança promovida pela Lei nº 14.905/2024</p>
+<!-- ══════════════════════════════════════
+     01 — INTRODUÇÃO
+══════════════════════════════════════ -->
+<section class="pg on" id="pg-intro">
+  <h2 class="stit">Atualização Monetária e Juros de Mora</h2>
+  <div class="dec"></div>
 
-  <div class="bloco-aviso">
-    <strong>⚠️ Aviso acadêmico:</strong> Este sistema tem fins exclusivamente didáticos. Os índices utilizados nas calculadoras são estimativas para demonstração. Para fins jurídicos, utilize sempre os índices oficiais do Banco Central do Brasil e do IBGE.
-  </div>
-
-  <div class="bloco-teoria">
-    <h3>A reforma do art. 406 do Código Civil</h3>
-    <p>A <strong>Lei nº 14.905/2024</strong>, publicada em 1º de julho de 2024 e em vigor desde <strong>30 de agosto de 2024</strong>, alterou o Código Civil para estabelecer regras claras e uniformes sobre correção monetária e juros legais — aplicáveis quando as partes não houverem convencionado taxas ou índices próprios.</p>
-    <p>A principal inovação é a criação da <strong>Taxa Legal de Juros</strong>, definida como a diferença entre a taxa SELIC e o IPCA do mês anterior. Isso resolve o problema histórico da <em>dupla contagem</em>: a SELIC já embute inflação; ao subtrair o IPCA, obtém-se o custo real do capital.</p>
-    <p>Paralelamente, o IPCA passa a ser o índice oficial de <strong>correção monetária</strong> quando não houver outro índice pactuado ou previsto em lei.</p>
-  </div>
-
-  <div class="grade-vg">
-    <div class="card-vg antes">
-      <h3>Regime Anterior (até jul/2024)</h3>
+  <!-- CONCEITOS FUNDAMENTAIS -->
+  <div class="grid-conceito">
+    <div class="card-conc azul">
+      <h4>Correção Monetária</h4>
       <ul>
-        <li>Juros: SELIC <em>ou</em> 1% a.m. (divergência)</li>
-        <li>SELIC como taxa única (juros + correção)</li>
-        <li>Correção: índice livre do tribunal</li>
-        <li>Insegurança jurídica entre tribunais</li>
-        <li>Risco de dupla contagem</li>
+        <li>Recompõe o valor real da moeda</li>
+        <li>Compensa os efeitos da inflação</li>
+        <li><strong>Não é penalidade</strong> — é atualização</li>
+        <li>Baseada em índice de preços (IPCA, IGP-M, INPC)</li>
+        <li>Incide desde o surgimento do crédito</li>
       </ul>
     </div>
-    <div class="card-vg depois">
-      <h3>Novo Regime (a partir de ago/2024)</h3>
+    <div class="card-conc verde">
+      <h4>Juros de Mora</h4>
       <ul>
-        <li>Juros: SELIC − IPCA (Taxa Legal)</li>
-        <li>Se SELIC &lt; IPCA → taxa = 0%</li>
-        <li>Correção monetária: IPCA (padrão legal)</li>
-        <li>Juros em regime de <strong>juros simples</strong></li>
-        <li>Uniformização e previsibilidade</li>
+        <li><strong>Penalidade</strong> pelo atraso no pagamento</li>
+        <li>Remunera o credor pelo tempo sem receber</li>
+        <li>Taxa geralmente de 1% a.m. (art. 406 CC)</li>
+        <li>Incide a partir da citação ou marco judicial</li>
+        <li>Aplicado sobre o valor corrigido ou principal</li>
       </ul>
     </div>
   </div>
 
-  <div class="bloco-destaque">
-    <strong>Regra prática:</strong> Para dívidas que <em>cruzam</em> os dois regimes, aplicam-se critérios diferentes em cada período. Até julho/2024: regime anterior. A partir de agosto/2024: Taxa Legal (SELIC − IPCA) + correção pelo IPCA.
-  </div>
-
-  <h3 style="font-family:var(--fonte-titulo);color:var(--verde-escuro);font-size:1.12rem;margin-bottom:13px;">Linha do Tempo Legislativa</h3>
-  <div class="timeline">
-    <div class="ev">
-      <div class="ev-ano">1916 — CC/1916, art. 1.062</div>
-      <div class="ev-desc">Juros moratórios fixados em <strong>6% ao ano</strong> — taxa nominal estática, completamente divorciada da inflação real.</div>
-    </div>
-    <div class="ev">
-      <div class="ev-ano">2002 — CC/2002, art. 406</div>
-      <div class="ev-desc">Juros legais passam a seguir a taxa da Fazenda Nacional. Tribunais divergem: parte aplica a <strong>SELIC</strong>; parte aplica <strong>1% ao mês</strong> (art. 161, §1º, CTN). Insegurança jurídica generalizada.</div>
-    </div>
-    <div class="ev">
-      <div class="ev-ano">2009 — STJ, EREsp 727.842/SP</div>
-      <div class="ev-desc">O STJ oscila entre SELIC e 1% a.m. O tema nunca foi definitivamente pacificado no regime anterior, gerando decades de decisões conflitantes.</div>
-    </div>
-    <div class="ev">
-      <div class="ev-ano">01 jul 2024 — Lei nº 14.905/2024 (publicação)</div>
-      <div class="ev-desc">Altera os arts. 389 e 406 do CC/2002. Estabelece IPCA como correção legal e SELIC − IPCA como taxa legal de juros.</div>
-    </div>
-    <div class="ev">
-      <div class="ev-ano">30 ago 2024 — Vigência + Resolução CMN nº 5.171/2024</div>
-      <div class="ev-desc">Lei entra em vigor. O Conselho Monetário Nacional regulamenta a metodologia: Taxa Legal mensal = SELIC mensal − IPCA-15 do mês anterior. Regime de <strong>juros simples</strong> com acumulação mês a mês.</div>
-    </div>
-  </div>
-
   <hr class="sep">
-  <p style="font-size:.84rem;color:var(--texto-suave);line-height:1.82">
-    <strong>Como usar este sistema:</strong> Navegue pelas abas. <strong>§ 01</strong> e <strong>§ 02</strong> explicam a teoria de cada regime com equações. <strong>§ 03</strong> e <strong>§ 04</strong> são as calculadoras práticas. <strong>§ 05</strong> compara todos os regimes sobre um mesmo valor. A <em>auditoria mês a mês</em> está disponível em todas as calculadoras.
-  </p>
-</section>
 
-<!-- ══════════════════════════════════════════════════
-     § 01 — REGIME ANTERIOR
-══════════════════════════════════════════════════ -->
-<section class="secao" id="regime-anterior">
-  <h2 class="tit-sec">Regime Anterior à Lei 14.905/2024</h2>
-  <div class="linha-dec"></div>
-
-  <!-- JUROS -->
-  <h3 style="font-family:var(--fonte-titulo);font-size:1.15rem;color:var(--verde-escuro);margin-bottom:12px;">Juros Legais (até julho/2024)</h3>
-
-  <div class="bloco-lei">
-    <div class="rot-lei">⚖️ Art. 406, CC/2002 — Redação anterior à Lei 14.905/2024</div>
-    "Quando os juros moratórios não forem convencionados, ou o forem sem taxa estipulada, ou quando provierem de determinação da lei, serão fixados segundo a taxa que estiver em vigor para a mora do pagamento de impostos devidos à Fazenda Nacional."
+  <!-- CONTEXTO DA LEI -->
+  <div class="box-teoria">
+    <h3>A Lei 14.905/2024 alterou o cálculo da taxa legal de juros</h3>
+    <p>A Lei 14.905/2024 alterou o cálculo da taxa legal de juros, exigindo que você aplique regras específicas de cálculo em seus processos a partir de agora.</p>
+    <p><strong>Mas o que isso significa na prática?</strong></p>
+    <p>Significa que, desde <strong>30 de agosto de 2024</strong>, todas as cobranças, contratos e execuções seguem um novo método de cálculo baseado na taxa Selic menos IPCA, que influencia diretamente o valor final das dívidas e créditos.</p>
   </div>
 
-  <div class="bloco-teoria">
-    <h3>A Polêmica: SELIC ou 1% ao mês?</h3>
-    <p>O art. 406 do CC/2002 remetia à "taxa da Fazenda Nacional", sem dizer qual era. Dois entendimentos disputavam espaço nos tribunais:</p>
-    <ul>
-      <li><strong>1% ao mês (12% a.a.)</strong> — com base no art. 161, §1º do CTN, a taxa aplicada na cobrança de tributos em atraso. Era o entendimento mais comum nos tribunais regionais por muitos anos.</li>
-      <li><strong>Taxa SELIC</strong> — a taxa efetivamente usada pela Fazenda Nacional para atualizar seus créditos (art. 13 da Lei nº 9.065/1995). O STJ foi consolidando esse entendimento como "taxa única" (juros + correção embutidos).</li>
+  <div class="box-lei">
+    <div class="rot-lei">⚖️ Contexto normativo</div>
+    <p>A Lei nº 14.905/2024, publicada em 01 de julho de 2024, trouxe alterações importantes ao Código Civil brasileiro, especialmente no que diz respeito à atualização monetária e aos juros.</p>
+    <p style="margin-top:8px">A lei estabelece que, quando não houver acordo entre as partes ou previsão específica na lei sobre a taxa de juros, aplica-se a taxa referencial do Sistema Especial de Liquidação e de Custódia (Selic), <strong>descontada pelo IPCA</strong> (Índice Nacional de Preços ao Consumidor Amplo).</p>
+    <p style="margin-top:8px">Esta regra, em vigor desde agosto de 2024, visa uniformizar o cálculo dos encargos em contratos civis e extracontratuais.</p>
+  </div>
+
+  <h3 class="blk">Entre as principais mudanças, destacam-se:</h3>
+  <div class="box-dest">
+    <ul style="margin-left:18px;line-height:2.1;font-size:.9rem">
+      <li>A aplicação do <strong>IPCA</strong> como índice de atualização monetária, caso não haja outro índice pactuado;</li>
+      <li>Nos casos de inadimplência, o devedor responde por perdas e danos, juros, atualização monetária e honorários advocatícios;</li>
+      <li>Foi afastada a aplicação da <strong>Lei da Usura</strong> (Decreto nº 22.626/1933) para alguns contratos entre pessoas jurídicas e operações financeiras regulamentadas.</li>
     </ul>
-    <p>O STF, no RE 1.558.191 (2ª Turma), também manteve o uso da SELIC antes da nova lei. O STJ afetou o Tema Repetitivo <strong>nº 1.368</strong> para pacificar definitivamente a questão — decisão ainda pendente ao tempo deste material.</p>
-    <p><strong>Na prática:</strong> ainda é comum ver sentenças aplicando 1% a.m. para períodos anteriores a agosto/2024, pois foi o entendimento predominante em tribunais de segunda instância por décadas.</p>
-  </div>
-
-  <div class="bloco-eq">
-    <div class="eq-titulo">Cálculo — Juros de 1% a.m. (Regime Capitação Simples)</div>
-    <div class="eq-formula">Montante = Principal × (1 + 0,01 × número_de_meses)
-
-Exemplo: R$ 10.000 por 24 meses
-  Montante = 10.000 × (1 + 0,01 × 24)
-           = 10.000 × 1,24
-           = R$ 12.400,00</div>
-    <div class="eq-desc">  Regime de juros simples — taxa fixa de 1% ao mês sobre o principal original
-  Não há capitalização: os juros não rendem juros sobre si mesmos</div>
-  </div>
-
-  <div class="bloco-eq">
-    <div class="eq-titulo">Cálculo — Juros pela SELIC (taxa única — juros compostos)</div>
-    <div class="eq-formula">Montante = Principal × ∏(1 + SELIC_mensal_i)
-                   para cada mês i do período
-
-Onde:
-  SELIC_mensal_i = taxa SELIC efetiva do mês i (divulgada pelo BACEN)
-  ∏ = produtório (capitalização composta)</div>
-    <div class="eq-desc">  SELIC como "taxa única": cobre juros E correção monetária simultaneamente
-  Regime composto: a SELIC mensal incide sobre o montante já atualizado
-  Fonte: série BACEN nº 4.390 (SELIC mensal efetiva)</div>
-  </div>
-
-  <div class="bloco-curiosidade">
-    <div class="rot-cur">Curiosidade — Dupla Contagem</div>
-    <p>Quando um juiz condenava ao pagamento de dívida com <strong>correção pelo IPCA + juros pela SELIC</strong>, ocorria tecnicamente dupla contagem da inflação: o IPCA recompunha o poder de compra, e a SELIC — que já embute inflação — recompensava o credor uma segunda vez pelo mesmo fenômeno. Em períodos de SELIC alta (14,75% a.a. em 2015-2016) e IPCA de ~10%, a distorção era especialmente significativa.</p>
   </div>
 
   <hr class="sep">
 
-  <!-- CORREÇÃO -->
-  <h3 style="font-family:var(--fonte-titulo);font-size:1.15rem;color:var(--verde-escuro);margin-bottom:12px;">Correção Monetária (até julho/2024)</h3>
+  <!-- ANTES E DEPOIS -->
+  <h3 class="blk">Como eram juros e atualização antes da Lei 14.905/2024?</h3>
 
-  <div class="bloco-lei">
-    <div class="rot-lei">⚖️ Art. 389, CC/2002 — Redação anterior à Lei 14.905/2024</div>
-    "Não cumprida a obrigação, responde o devedor por perdas e danos, mais juros e <strong>atualização monetária segundo índices oficiais regularmente estabelecidos</strong>."
-    <br><br><em>→ O CC/2002 não especificava qual índice — cada tribunal criava sua própria "tabela prática" com IGP-M, INPC, IPCA ou outros índices regionais.</em>
-  </div>
+  <p style="font-size:.9rem;color:var(--ts);margin-bottom:16px">A Lei nº 14.905/2024, complementada pela Resolução nº 5.171/2024, adotou a nova taxa legal de juros e definiu o IPCA como índice de correção quando o contrato ou a lei não falam nada sobre isso. Mas essa mudança <strong>só começa a valer em agosto de 2024</strong>.</p>
 
-  <div class="bloco-teoria">
-    <h3>A Fragmentação dos Índices de Correção</h3>
-    <p>A ausência de um índice único gerava verdadeiro <em>forum shopping</em>: a escolha estratégica do juízo com base no índice de correção aplicado pelo tribunal poderia mudar substancialmente o valor final da dívida. Tribunais diferentes usavam:</p>
+  <div class="box-teoria">
+    <h3>Qual era a regra antes da nova lei?</h3>
+    <p>Antes da nova lei, o art. 406 do Código Civil dizia que os juros moratórios deviam seguir a mesma taxa aplicada aos débitos da Fazenda Nacional. Com o tempo, dois caminhos passaram a ser aceitos:</p>
     <ul>
-      <li><strong>IGP-M (FGV)</strong> — muito comum em contratos de locação e em alguns TJs. Sofre forte influência cambial e pode divergir muito do IPCA em períodos de alta do dólar (ex.: +23% em 2020).</li>
-      <li><strong>INPC (IBGE)</strong> — preferido em ações trabalhistas e previdenciárias.</li>
-      <li><strong>IPCA (IBGE)</strong> — adotado em TRFs e TRTs, especialmente após 2015. Era tecnicamente o mais indicado.</li>
+      <li><strong>1% ao mês</strong> — com base no art. 161, §1º, do Código Tributário Nacional</li>
+      <li><strong>SELIC</strong> — taxa usada pela Fazenda Nacional na cobrança de seus créditos</li>
     </ul>
-    <p>Em muitos casos, mesmo com índice contratual definido, o juiz aplicava a tabela do tribunal, mudando consideravelmente o valor final e beneficiando o devedor.</p>
+    <p>Esse impasse gerou insegurança jurídica, com decisões diferentes entre tribunais. O STJ foi firmando o entendimento de que, nas dívidas civis sem taxa definida, a <strong>SELIC devia ser aplicada como taxa única</strong>, cobrindo juros e correção. Entendimento reforçado pelo STF no RE 1558191.</p>
+    <p>Atenção: o STJ afetou o caso ao <strong>Tema Repetitivo 1.368</strong> — a decisão pode ser confirmada ou adaptada futuramente.</p>
   </div>
 
-  <div class="bloco-curiosidade">
-    <div class="rot-cur">Curiosidade — TR e a Poupança</div>
-    <p>A <strong>Taxa Referencial (TR)</strong>, criada no Plano Collor II (1991), foi muito usada como índice de correção — especialmente em financiamentos do SFH e na caderneta de poupança. O STF (RE 567.441, Tema 42) decidiu que a TR não pode ser imposta quando resulta em rendimento inferior ao IPCA, pois isso equivale a expropriação indireta do crédito. Essa jurisprudência influenciou diretamente o movimento que culminou na Lei nº 14.905/2024.</p>
+  <div class="box-info">
+    <div class="rot-info">Na prática dos tribunais</div>
+    <p>Os juízes nem sempre acompanham essas mudanças dos tribunais superiores. Ainda é bem comum ver sentenças aplicando <strong>1% ao mês</strong> antes de agosto de 2024, afinal, esse foi o entendimento mais comum nos tribunais regionais por muitos anos. Como a Lei 14.905/2024 não vale retroativamente, ela não muda as regras dos períodos anteriores — gerando a combinação de dois regimes diferentes na mesma dívida.</p>
   </div>
 
-  <div class="tabela-regimes-wrap">
-    <table class="tabela-regimes">
+  <div class="wrap-tab">
+    <table class="tab-reg">
       <thead>
         <tr>
           <th>Período</th>
-          <th>Correção Monetária</th>
-          <th>Juros Legais</th>
+          <th>Juros legais aplicáveis</th>
+          <th>Correção monetária</th>
           <th>Observação</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><span class="badge-antes">até jul/2024</span></td>
+          <td><span class="bdg-a">Até julho/2024</span></td>
+          <td><strong>1% a.m.</strong> ou <strong>SELIC</strong></td>
           <td>Índice do tribunal (IGP-M, INPC, IPCA…)</td>
-          <td>1% a.m. <em>ou</em> SELIC (como taxa única)</td>
-          <td>Depende da decisão do juiz e do tribunal</td>
+          <td>Depende da decisão do juiz / tribunal</td>
         </tr>
         <tr>
-          <td><span class="badge-depois">ago/2024 em diante</span></td>
+          <td><span class="bdg-d">A partir de agosto/2024</span></td>
+          <td><strong>Nova Taxa Legal = SELIC − IPCA</strong></td>
           <td><strong>IPCA</strong> (padrão legal obrigatório)</td>
-          <td><strong>SELIC − IPCA</strong> (Taxa Legal)</td>
-          <td>Lei nº 14.905/2024 + Res. CMN 5.171/2024</td>
+          <td>Aplicação obrigatória — Lei nº 14.905/2024</td>
         </tr>
       </tbody>
     </table>
   </div>
+
+  <hr class="sep">
+  <h3 class="blk">Linha do Tempo Legislativa</h3>
+  <div class="timeline">
+    <div class="ev">
+      <div class="ev-ano">1916 — CC/1916, art. 1.062</div>
+      <div class="ev-desc">Juros fixados em <strong>6% ao ano</strong> — taxa estática por 86 anos.</div>
+    </div>
+    <div class="ev">
+      <div class="ev-ano">2002 — CC/2002, art. 406</div>
+      <div class="ev-desc">Juros legais remetidos à taxa da Fazenda Nacional. Tribunais divergem: parte aplica a <strong>SELIC</strong>; parte aplica <strong>1% ao mês</strong>.</div>
+    </div>
+    <div class="ev">
+      <div class="ev-ano">2009 — STJ, EREsp 727.842/SP</div>
+      <div class="ev-desc">STJ oscila entre SELIC e 1% a.m. Insegurança jurídica generalizada. Tema Repetitivo 1.368 afetado para pacificação futura.</div>
+    </div>
+    <div class="ev">
+      <div class="ev-ano">01/07/2024 — Lei nº 14.905/2024 (publicação)</div>
+      <div class="ev-desc">Altera arts. 389 e 406 do CC/2002. IPCA como correção legal; SELIC − IPCA como taxa legal de juros.</div>
+    </div>
+    <div class="ev">
+      <div class="ev-ano">30/08/2024 — Vigência + Resolução CMN nº 5.171/2024</div>
+      <div class="ev-desc">Lei entra em vigor. CMN regulamenta: Taxa Legal mensal = SELIC mensal − IPCA-15 do mês anterior. <strong>Juros simples</strong>. Se resultado negativo → taxa = 0%.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;text-align:center">
+    <button class="btn-calc" onclick="irPara('pg-calculadora',document.querySelectorAll('.tab')[1])">→ Ir para a Calculadora</button>
+  </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════
-     § 02 — NOVO REGIME
-══════════════════════════════════════════════════ -->
-<section class="secao" id="novo-regime">
-  <h2 class="tit-sec">Novo Regime — Lei nº 14.905/2024</h2>
-  <div class="linha-dec"></div>
+<!-- ══════════════════════════════════════
+     02 — CALCULADORA
+══════════════════════════════════════ -->
+<section class="pg" id="pg-calculadora">
+  <h2 class="stit">Calculadora de Atualização</h2>
+  <div class="dec"></div>
+  <p class="sub">Nível tribunal — memória de cálculo completa com separação de regimes</p>
 
-  <!-- CORREÇÃO -->
-  <h3 style="font-family:var(--fonte-titulo);font-size:1.15rem;color:var(--verde-escuro);margin-bottom:12px;">Correção Monetária — IPCA como Padrão Legal</h3>
+  <div class="box-aviso">
+    <strong>⚠️ Índices didáticos:</strong> Os índices anuais usados são estimativas para fins acadêmicos. Para cálculos judiciais reais, utilize as séries oficiais do BACEN (29541, 29542) e IBGE. A Taxa Legal de março/2026 (SELIC 14,75% − IPCA 0,88%) é usada como referência atual.
+  </div>
 
-  <div class="bloco-lei">
+  <div class="form-card">
+    <div class="form-head">
+      <span class="form-head-tit">Dados do Processo</span>
+    </div>
+    <div class="form-body">
+
+      <!-- PROCESSO -->
+      <div class="sec-form">
+        <div class="sec-form-tit">Identificação</div>
+        <div class="grid3">
+          <div class="campo-grp">
+            <label class="campo-rot" for="f-processo">Processo</label>
+            <input class="f" type="text" id="f-processo" placeholder="número do processo (opcional)">
+          </div>
+          <div class="campo-grp">
+            <label class="campo-rot" for="f-credor">Credor</label>
+            <input class="f" type="text" id="f-credor" placeholder="credor (opcional)">
+          </div>
+          <div class="campo-grp">
+            <label class="campo-rot" for="f-devedor">Devedor</label>
+            <input class="f" type="text" id="f-devedor" placeholder="devedor (opcional)">
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="campo-grp">
+            <label class="campo-rot" for="f-datafim">Data final do cálculo
+              <span class="campo-dica">Deixe em branco para calcular até hoje (14/04/2026)</span>
+            </label>
+            <input class="f" type="text" id="f-datafim" placeholder="dd/mm/aaaa">
+          </div>
+          <div class="campo-grp">
+            <label class="campo-rot" for="f-indice">Índice de atualização monetária</label>
+            <select class="f" id="f-indice">
+              <option value="tjdft">Índices TJDFT (INPC até 31/08/2024, IPCA a partir de 01/09/2024)</option>
+              <option value="ipca">IPCA (todo o período)</option>
+              <option value="inpc">INPC (todo o período)</option>
+              <option value="igpm">IGP-M (todo o período)</option>
+              <option value="selic-unica">SELIC como taxa única (juros + correção embutidos)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- VALORES -->
+      <div class="sec-form">
+        <div class="sec-form-tit">Valores</div>
+        <div id="lista-valores">
+          <!-- linhas de valores inseridas pelo JS -->
+        </div>
+        <button class="btn-add" onclick="adicionarValor()">+ Adicionar valor</button>
+      </div>
+
+      <!-- JUROS -->
+      <div class="sec-form">
+        <div class="sec-form-tit">Juros de Mora</div>
+        <div class="grid2">
+          <div class="campo-grp">
+            <label class="campo-rot" for="f-juros-incidencia">Juros incidentes</label>
+            <select class="f" id="f-juros-incidencia">
+              <option value="data-valor">A partir da data dos valores</option>
+              <option value="citacao">A partir da citação</option>
+              <option value="vencimento">A partir do vencimento</option>
+              <option value="sem">Sem juros</option>
+            </select>
+          </div>
+          <div class="campo-grp">
+            <label class="campo-rot" for="f-juros-tipo">Tipo de juros</label>
+            <select class="f" id="f-juros-tipo" onchange="atualizarCamposJuros()">
+              <option value="legal-automatico">Juros legais automáticos (0,5% até 10/01/2003 → 1% a partir de 11/01/2003 → Taxa Legal a partir de 30/08/2024)</option>
+              <option value="fixo">Percentual fixo (durante todo o período)</option>
+              <option value="sem">Sem juros</option>
+            </select>
+          </div>
+        </div>
+        <div id="campo-pct-fixo" style="display:none">
+          <div class="grid2">
+            <div class="campo-grp">
+              <label class="campo-rot" for="f-juros-pct">Percentual (% ao mês)
+                <span class="campo-dica">Ex: 1.00 para 1% a.m.</span>
+              </label>
+              <input class="f" type="number" id="f-juros-pct" value="1.00" step="0.01" min="0" max="100">
+            </div>
+            <div class="campo-grp">
+              <label class="campo-rot" for="f-juros-datafim">Data fim dos juros
+                <span class="campo-dica">Deixe em branco para calcular até a data limite</span>
+              </label>
+              <input class="f" type="text" id="f-juros-datafim" placeholder="dd/mm/aaaa">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MULTA -->
+      <div class="sec-form">
+        <div class="sec-form-tit">Multas (opcional)</div>
+        <div class="grid2">
+          <div class="campo-grp">
+            <label class="campo-rot" for="f-multa-tipo">Tipo de multa</label>
+            <select class="f" id="f-multa-tipo">
+              <option value="sem">Sem multa</option>
+              <option value="pct">Percentual sobre o valor principal</option>
+              <option value="monetaria">Valor monetário fixo</option>
+            </select>
+          </div>
+          <div class="campo-grp">
+            <label class="campo-rot" for="f-multa-valor">Valor / Percentual
+              <span class="campo-dica">Ex: 10.00 para 10%</span>
+            </label>
+            <input class="f" type="number" id="f-multa-valor" value="10.00" step="0.01" min="0">
+          </div>
+        </div>
+        <div class="campo-grp">
+          <label class="campo-rot" for="f-multa-desc">Descrição da multa</label>
+          <input class="f" type="text" id="f-multa-desc" placeholder="Descrição (opcional)">
+        </div>
+      </div>
+
+      <div class="btns-row">
+        <button class="btn-calc" onclick="executarCalculo()">⚖️ Calcular Atualização</button>
+        <button class="btn-sec" onclick="limparCalculadora()">Limpar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÁREA DE RESULTADO -->
+  <div class="result-area" id="resultado-principal">
+    <!-- preenchido pelo JS -->
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     03 — REGIME ANTERIOR
+══════════════════════════════════════ -->
+<section class="pg" id="pg-antes">
+  <h2 class="stit">Regime Anterior — Até julho/2024</h2>
+  <div class="dec"></div>
+
+  <div class="box-lei">
+    <div class="rot-lei">⚖️ Art. 406, CC/2002 — Redação anterior à Lei 14.905/2024</div>
+    "Quando os juros moratórios não forem convencionados, ou o forem sem taxa estipulada, ou quando provierem de determinação da lei, serão fixados segundo a taxa que estiver em vigor para a mora do pagamento de impostos devidos à Fazenda Nacional."
+  </div>
+
+  <div class="box-teoria">
+    <h3>A Polêmica: SELIC ou 1% ao mês?</h3>
+    <p>O art. 406 do CC/2002 remetia à "taxa da Fazenda Nacional", sem especificar. Dois entendimentos coexistiam:</p>
+    <ul>
+      <li><strong>1% ao mês (12% a.a.)</strong> — art. 161, §1º do CTN. Entendimento mais comum nos tribunais regionais. Regime de <em>juros simples</em>.</li>
+      <li><strong>Taxa SELIC</strong> — efetivamente usada pela Fazenda. Consolidada pelo STJ como "taxa única" (juros + correção). Regime de <em>juros compostos</em>.</li>
+    </ul>
+    <p>Para <strong>correção monetária</strong>, o art. 389 mencionava "índices oficiais" sem especificar qual. Cada tribunal tinha sua tabela prática, gerando fragmentação.</p>
+  </div>
+
+  <div class="box-eq">
+    <div class="eq-tit">Fórmula A — Juros de 1% a.m. (Juros Simples)</div>
+    <div class="eq-f">Montante = Principal × (1 + i × n)
+
+Onde:
+  i = 0,01 (1% ao mês)
+  n = número de meses do período
+
+Exemplo: R$ 10.000 por 24 meses
+  Montante = 10.000 × (1 + 0,01 × 24)
+           = 10.000 × 1,24
+           = R$ 12.400,00</div>
+    <div class="eq-desc">  Regime simples: juros incidem apenas sobre o principal original
+  Não há capitalização — juros não rendem sobre si mesmos</div>
+  </div>
+
+  <div class="box-eq">
+    <div class="eq-tit">Fórmula B — SELIC como Taxa Única (Juros Compostos, mês a mês)</div>
+    <div class="eq-f">Montante = Principal × ∏(1 + SELIC_efetiva_i)
+                   para cada mês i do período
+
+Onde:
+  SELIC_efetiva_i = taxa SELIC efetiva do mês i (série BACEN 4.390)
+  ∏ = produtório (capitalização composta)
+
+Interpretação: SELIC cobre juros E correção monetária simultaneamente</div>
+    <div class="eq-desc">  Fonte oficial: Banco Central, séries temporais
+  A SELIC é taxa nominal: já embute expectativa de inflação
+  Usado como "taxa única" = sem correção monetária separada</div>
+  </div>
+
+  <div class="box-eq">
+    <div class="eq-tit">Fórmula C — Correção por Índice de Preços + Juros 1% a.m.</div>
+    <div class="eq-f">Valor_corrigido = Principal × ∏(1 + índice_mensal_i)
+
+Juros = Valor_corrigido × (0,01 × n)
+
+Montante_total = Valor_corrigido + Juros
+
+Onde:
+  índice_mensal_i = IPCA, INPC ou IGP-M do mês i
+  n = número de meses (juros simples sobre o valor corrigido)</div>
+    <div class="eq-desc">  Correção: capitalização composta mês a mês pelo índice escolhido
+  Juros: regime simples incidindo sobre o principal já corrigido</div>
+  </div>
+
+  <div class="box-info">
+    <div class="rot-info">Problema da Dupla Contagem</div>
+    <p>Quando se aplicava <strong>correção pelo IPCA + juros pela SELIC</strong>, havia dupla contagem da inflação: o IPCA recompunha o poder de compra, e a SELIC — que já incorpora inflação — adicionava uma segunda camada. Em 2015 (SELIC 14,25% + IPCA 10,67%), a distorção era extrema. A Lei 14.905/2024 resolveu isso ao subtrair o IPCA da SELIC.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     04 — NOVO REGIME (LEI 14.905/2024)
+══════════════════════════════════════ -->
+<section class="pg" id="pg-depois">
+  <h2 class="stit">Novo Regime — Lei nº 14.905/2024</h2>
+  <div class="dec"></div>
+
+  <div class="box-lei">
+    <div class="rot-lei">⚖️ Art. 406, §1º — CC/2002 (incluído pela Lei nº 14.905/2024)</div>
+    "A taxa de juros de que trata o caput deste artigo corresponderá à taxa referencial do Sistema Especial de Liquidação e de Custódia (Selic), <strong>deduzida a variação do IPCA do mês anterior</strong> à cobrança dos juros ou, em caso de resultado negativo, será considerada nula."
+  </div>
+
+  <!-- DESTAQUE TAXA LEGAL MARÇO 2026 -->
+  <div style="background:linear-gradient(135deg,var(--vd) 0%,#0d2b1e 100%);border-radius:var(--rg);padding:20px 24px;margin-bottom:20px;border:1px solid rgba(201,168,76,.4)">
+    <div style="font-family:var(--fn-m);font-size:.65rem;color:rgba(201,168,76,.7);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">📅 Valores de Referência — Março/2026</div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:12px">
+      <div>
+        <div style="font-family:var(--fn-m);font-size:.65rem;color:rgba(245,240,232,.5);text-transform:uppercase;margin-bottom:2px">SELIC mensal efetiva</div>
+        <div style="font-family:var(--fn-m);font-size:1.4rem;color:var(--doc);font-weight:600">1,2091%</div>
+        <div style="font-family:var(--fn-m);font-size:.7rem;color:rgba(245,240,232,.45)">(14,75% a.a. → mensal)</div>
+      </div>
+      <div>
+        <div style="font-family:var(--fn-m);font-size:.65rem;color:rgba(245,240,232,.5);text-transform:uppercase;margin-bottom:2px">IPCA (mês anterior)</div>
+        <div style="font-family:var(--fn-m);font-size:1.4rem;color:var(--doc);font-weight:600">0,8800%</div>
+        <div style="font-family:var(--fn-m);font-size:.7rem;color:rgba(245,240,232,.45)">(IPCA-15 fev/2026 estimado)</div>
+      </div>
+      <div>
+        <div style="font-family:var(--fn-m);font-size:.65rem;color:rgba(245,240,232,.5);text-transform:uppercase;margin-bottom:2px">Taxa Legal (SELIC − IPCA)</div>
+        <div style="font-family:var(--fn-m);font-size:1.4rem;color:#6ee87a;font-weight:600">0,3291%</div>
+        <div style="font-family:var(--fn-m);font-size:.7rem;color:rgba(245,240,232,.45)">(ao mês — juros simples)</div>
+      </div>
+    </div>
+    <div style="background:rgba(0,0,0,.3);border-radius:var(--r);padding:10px 14px;font-family:var(--fn-m);font-size:.8rem;color:#b2e0b2;line-height:1.9">
+      Taxa_Legal_mar2026 = SELIC_mensal − IPCA_mês_anterior<br>
+      Taxa_Legal_mar2026 = 1,2091% − 0,8800% = <strong style="color:#6ee87a">0,3291% a.m.</strong>
+    </div>
+  </div>
+
+  <div class="box-eq">
+    <div class="eq-tit">Fórmula D — Taxa Legal de Juros (SELIC − IPCA) — Resolução CMN 5.171/2024</div>
+    <div class="eq-f">Taxa_Legal_mensal_i = max(SELIC_mensal_i − IPCA15_mês_anterior_i,  0)
+
+Fator_de_juros = 1 + Σ(Taxa_Legal_mensal_i)    ← JUROS SIMPLES
+                     para cada mês i
+
+Montante_juros = Principal_corrigido × Fator_de_juros
+
+Aplicação em março/2026:
+  SELIC_mensal  = (1 + 0,1475)^(1/12) − 1 = 1,2091%
+  IPCA_anterior = 0,8800%
+  Taxa_Legal    = max(1,2091% − 0,8800%, 0) = 0,3291% a.m.</div>
+    <div class="eq-desc">  SELIC_mensal_i     → série BACEN 29541 (divulgada mensalmente pelo BCB)
+  IPCA15_anterior_i  → série BACEN 29542 (IPCA-15 do mês ANTERIOR ao de apuração)
+  max(…, 0)          → se SELIC &lt; IPCA → Taxa Legal = 0% naquele mês
+  Σ = SOMATÓRIO (regime de JUROS SIMPLES — NÃO compostos)
+  ⚠️ A correção pelo IPCA usa capitalização COMPOSTA; os juros usam SIMPLES</div>
+  </div>
+
+  <div class="box-eq">
+    <div class="eq-tit">Fórmula E — Correção IPCA (novo padrão legal — art. 389, §único)</div>
+    <div class="eq-f">Valor_corrigido = Principal × ∏(1 + IPCA_mensal_i)
+                   para cada mês i do período
+
+Montante_total = Valor_corrigido × (1 + Σ Taxa_Legal_mensal_i)</div>
+    <div class="eq-desc">  Correção: capitalização COMPOSTA pelo IPCA mensal (série IBGE)
+  Juros: regime SIMPLES pela Taxa Legal (SELIC − IPCA)
+  Fonte IPCA: IBGE / Fonte Taxa Legal: BCB séries 29541 e 29542</div>
+  </div>
+
+  <div class="box-teoria">
+    <h3>Por que SELIC − IPCA = taxa real?</h3>
+    <p>A SELIC é uma taxa <em>nominal</em>: ela já incorpora a expectativa de inflação futura. Ao subtrair o IPCA (inflação efetiva), obtém-se a <strong>taxa de juros real</strong> — o custo puro do capital, depurado do componente inflacionário. Isso é a <strong>Equação de Fisher</strong> em versão simplificada:</p>
+    <p style="font-family:var(--fn-m);font-size:.88rem;text-align:center;padding:8px 0;color:var(--doc)">taxa_real ≈ taxa_nominal − inflação = SELIC − IPCA</p>
+    <p>Ao separar os dois componentes — IPCA corrige o principal, SELIC − IPCA remunera o capital — a lei elimina a dupla contagem: a inflação é compensada uma única vez.</p>
+    <p>Se a SELIC ficar abaixo do IPCA (resultado negativo), a <strong>Taxa Legal é zero</strong> naquele mês — o devedor não paga juros reais negativos.</p>
+  </div>
+
+  <div class="box-lei">
     <div class="rot-lei">⚖️ Art. 389, Parágrafo único — CC/2002 (incluído pela Lei nº 14.905/2024)</div>
     "Na hipótese de o índice de atualização monetária não ter sido convencionado ou não estar previsto em lei específica, será aplicada a variação do Índice Nacional de Preços ao Consumidor Amplo (IPCA), apurado e divulgado pela Fundação Instituto Brasileiro de Geografia e Estatística (IBGE), ou do índice que vier a substituí-lo."
   </div>
 
-  <div class="bloco-teoria">
-    <h3>IPCA: o novo padrão legal de correção</h3>
-    <p>A Lei nº 14.905/2024 encerra a fragmentação de índices ao eleger o <strong>IPCA</strong> como padrão supletivo obrigatório de correção monetária. A regra é simples: se o contrato ou a lei específica não definirem outro índice, usa-se o IPCA.</p>
-    <p>O <strong>IPCA</strong> (Índice Nacional de Preços ao Consumidor Amplo) é calculado mensalmente pelo IBGE, mede a variação de preços para famílias de 1 a 40 salários mínimos em 13 regiões metropolitanas, e é o índice de referência do sistema de metas de inflação do Banco Central desde 1999.</p>
-    <p>A mudança resolve o <em>forum shopping</em>: agora o índice supletivo é uniforme em todo o país. Se o IGP-M for superior ao IPCA em dado período, o credor <em>não</em> pode exigir o IGP-M, salvo se este estiver estipulado em contrato.</p>
-  </div>
-
-  <div class="bloco-eq">
-    <div class="eq-titulo">Equação — Correção pelo IPCA (novo padrão legal)</div>
-    <div class="eq-formula">Montante = Principal × Fator_IPCA_acumulado
-
-Fator_IPCA_acumulado = ∏(1 + IPCA_mensal_i)
-                       para cada mês i do período
-
-Onde IPCA_mensal_i é divulgado mensalmente pelo IBGE</div>
-    <div class="eq-desc">  Regime de capitalização composta mês a mês
-  A correção repõe apenas o poder de compra — não há custo de capital
-  Aplica-se a obrigações sem caráter moratório (dívidas de valor, precatórios etc.)</div>
-  </div>
-
-  <hr class="sep">
-
-  <!-- JUROS -->
-  <h3 style="font-family:var(--fonte-titulo);font-size:1.15rem;color:var(--verde-escuro);margin-bottom:12px;">Taxa Legal de Juros — SELIC menos IPCA</h3>
-
-  <div class="bloco-lei">
-    <div class="rot-lei">⚖️ Art. 406, §1º — CC/2002 (incluído pela Lei nº 14.905/2024)</div>
-    "A taxa de juros de que trata o caput deste artigo corresponderá à taxa referencial do Sistema Especial de Liquidação e de Custódia (Selic), deduzida a variação do Índice Nacional de Preços ao Consumidor Amplo (IPCA) do mês anterior à cobrança dos juros ou, em caso de resultado negativo, será considerada nula."
-  </div>
-
-  <div class="bloco-teoria">
-    <h3>A Lógica Econômica da Taxa Legal: SELIC − IPCA</h3>
-    <p>A <strong>SELIC</strong> é uma taxa <em>nominal</em>: ela já incorpora a expectativa de inflação futura. A <strong>Taxa Legal = SELIC − IPCA</strong> é essencialmente a <strong>taxa de juros real</strong> — o custo puro do capital, depurado do componente inflacionário.</p>
-    <p>Ao separar os dois componentes (IPCA corrige o principal; SELIC − IPCA remunera o capital), a lei elimina a dupla contagem: a inflação não é mais computada duas vezes. Essa separação é inspirada na <strong>Equação de Fisher</strong>, pela qual:</p>
-    <p style="text-align:center;font-family:var(--fonte-mono);font-size:.9rem;padding:8px 0">(1 + taxa_nominal) = (1 + inflação) × (1 + taxa_real)</p>
-    <p>Simplificando para pequenas taxas: <strong>taxa_real ≈ taxa_nominal − inflação = SELIC − IPCA</strong>.</p>
-    <p>Se a SELIC ficar abaixo do IPCA (resultado negativo), a <strong>Taxa Legal é zero</strong> naquele mês — o devedor não paga juros reais negativos.</p>
-  </div>
-
-  <div class="bloco-lei">
-    <div class="rot-lei">⚖️ Resolução CMN nº 5.171/2024 — Metodologia de Cálculo</div>
-    A Resolução nº 5.171/2024 do Conselho Monetário Nacional regulamentou a metodologia:
-    <br><br>
-    • <strong>Taxa Legal Mensal</strong> = SELIC mensal efetiva − IPCA-15 do mês anterior<br>
-    • Se o resultado for <strong>negativo → Taxa Legal = 0%</strong> no mês<br>
-    • Regime de <strong>juros simples</strong>: acumulação das taxas de cada mês (não capitalização composta)<br>
-    • Para cálculo <em>pro rata die</em>: taxa diária = Taxa Legal do mês ÷ dias corridos do mês (6 casas decimais)
-  </div>
-
-  <div class="bloco-eq">
-    <div class="eq-titulo">Equação — Taxa Legal de Juros (SELIC − IPCA) — Juros Simples</div>
-    <div class="eq-formula">Taxa_legal_mensal_i = max(SELIC_mensal_i − IPCA15_mês_anterior_i, 0)
-
-Fator_de_juros = 1 + Σ(Taxa_legal_mensal_i)
-                     para cada mês i do período
-
-Montante = Principal × Fator_de_juros</div>
-    <div class="eq-desc">  SELIC_mensal_i     → taxa SELIC efetiva do mês i (série BACEN 29541)
-  IPCA15_anterior_i  → IPCA-15 do mês anterior ao mês i (série BACEN 29542)
-  Σ = somatório (regime de JUROS SIMPLES — não compostos)
-  max(…, 0)          → garante Taxa Legal ≥ 0 em qualquer mês
-
-  ⚠️ ATENÇÃO: a Taxa Legal usa JUROS SIMPLES (soma das taxas mensais),
-     diferente do IPCA que usa capitalização composta mês a mês.</div>
-  </div>
-
-  <div class="bloco-curiosidade">
-    <div class="rot-cur">Curiosidade — Irving Fisher e o Brasil</div>
-    <p>Irving Fisher publicou sua teoria sobre taxas nominais e reais em <strong>"The Theory of Interest"</strong> (1930). O Brasil levou quase um século para incorporar formalmente essa distinção ao Código Civil. Fisher também é lembrado pela afirmação, dias antes do crash de 1929, de que as ações americanas haviam atingido um <em>"permanent high plateau"</em> — um dos maiores erros de previsão da história econômica.</p>
-  </div>
-
-  <div class="bloco-aviso">
-    <strong>⚠️ Fontes oficiais:</strong> A Taxa Legal mensal é publicada pelo Banco Central do Brasil. Consulte:
-    Série BACEN <strong>29541</strong> (SELIC para cálculo da Taxa Legal) e <strong>29542</strong> (IPCA para cálculo da Taxa Legal) em <em>bcb.gov.br → Estatísticas → Séries Temporais</em>.
-  </div>
-
-  <hr class="sep">
-
-  <!-- EXEMPLOS PRÁTICOS -->
-  <h3 style="font-family:var(--fonte-titulo);font-size:1.12rem;color:var(--verde-escuro);margin-bottom:12px;">Situações Práticas — Quando Aplicar Cada Regra?</h3>
-
-  <div class="bloco-teoria">
-    <h3>Exemplos de combinação contratual</h3>
-    <p><strong>Caso 1 — Contrato sem correção e sem juros definidos:</strong><br>
-    Correção monetária: <em>IPCA</em> (nova regra supletiva) · Juros: <em>SELIC − IPCA</em> (Taxa Legal)</p>
-    <p><strong>Caso 2 — Contrato com IGP-M para correção, sem taxa de juros:</strong><br>
-    Correção monetária: <em>IGP-M</em> (conforme convencionado) · Juros: <em>SELIC − IPCA</em> (Taxa Legal — a dedução sempre usa o IPCA, mesmo que a correção seja outro índice)</p>
-    <p><strong>Caso 3 — Contrato sem correção, com juros de 1% a.m.:</strong><br>
-    Correção monetária: <em>IPCA</em> (nova regra supletiva) · Juros: <em>1% a.m.</em> (conforme convencionado)</p>
-    <p><strong>Caso 4 — Contrato com IGP-M e juros de 1% a.m.:</strong><br>
-    Correção: <em>IGP-M</em> · Juros: <em>1% a.m.</em> — a Lei 14.905/2024 não interfere quando ambos estão definidos.</p>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════
-     § 03 — CALCULADORA REGIME ANTERIOR
-══════════════════════════════════════════════════ -->
-<section class="secao" id="calc-anterior">
-  <h2 class="tit-sec">Calculadora — Regime Anterior</h2>
-  <div class="linha-dec"></div>
-  <p class="sub-sec">Calcula correção monetária e juros para o período anterior a agosto/2024</p>
-
-  <div class="bloco-aviso">
-    <strong>⚠️ Índices simulados:</strong> As taxas SELIC, IPCA, INPC e IGP-M usadas aqui são estimativas anuais para fins didáticos. Para cálculos jurídicos reais, consulte as séries temporais oficiais do BACEN e do IBGE.
-  </div>
-
-  <div class="card-calc">
-    <div class="calc-cab">
-      <span class="calc-tit">§ 03 — Correção Monetária + Juros (Regime Anterior)</span>
-    </div>
-    <div class="calc-corpo">
-
-      <div class="grupo">
-        <label class="rot" for="ant-valores">Valores a corrigir (R$)
-          <span class="rot-dica">Um valor por linha. Use ponto ou vírgula como separador decimal.</span>
-        </label>
-        <textarea class="campo" id="ant-valores" placeholder="1000,00&#10;5000.50&#10;12500,75"></textarea>
-      </div>
-
-      <div class="grade-datas">
-        <div class="grupo">
-          <label class="rot" for="ant-inicio">Data de início</label>
-          <input type="date" class="campo" id="ant-inicio">
-        </div>
-        <div class="grupo">
-          <label class="rot" for="ant-fim">Data de fim</label>
-          <input type="date" class="campo" id="ant-fim">
-        </div>
-      </div>
-
-      <div class="grupo">
-        <label class="rot" for="ant-modo">Modo de cálculo</label>
-        <select class="campo" id="ant-modo" onchange="atualizarCamposAnteriores()">
-          <option value="selic-unica">SELIC como taxa única (juros + correção embutidos)</option>
-          <option value="1pct">1% ao mês — juros simples (sem correção monetária separada)</option>
-          <option value="correcao-ipca">Correção pelo IPCA + juros 1% a.m.</option>
-          <option value="correcao-inpc">Correção pelo INPC + juros 1% a.m.</option>
-          <option value="correcao-igpm">Correção pelo IGP-M + juros 1% a.m.</option>
-          <option value="so-ipca">Só correção pelo IPCA (sem juros)</option>
-          <option value="so-inpc">Só correção pelo INPC (sem juros)</option>
-          <option value="so-igpm">Só correção pelo IGP-M (sem juros)</option>
-        </select>
-      </div>
-
-      <div class="linha-btns">
-        <button class="btn-calc" onclick="calcularAnterior()">Calcular</button>
-        <button class="btn-limpar" onclick="limparSecao('ant')">Limpar</button>
-      </div>
-      <div class="area-res" id="resultado-ant"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════
-     § 04 — CALCULADORA NOVO REGIME
-══════════════════════════════════════════════════ -->
-<section class="secao" id="calc-novo">
-  <h2 class="tit-sec">Calculadora — Novo Regime (Lei 14.905/2024)</h2>
-  <div class="linha-dec"></div>
-  <p class="sub-sec">Correção pelo IPCA + Taxa Legal de Juros (SELIC − IPCA) em juros simples</p>
-
-  <div class="bloco-aviso">
-    <strong>⚠️ Índices simulados:</strong> A Taxa Legal mensal usada aqui é estimada a partir de SELIC e IPCA-15 anuais hipotéticos. Para cálculos reais, consulte as séries BACEN 29541 e 29542 em <em>bcb.gov.br</em>.
-  </div>
-
-  <div class="card-calc">
-    <div class="calc-cab">
-      <span class="calc-tit">§ 04 — Correção IPCA + Taxa Legal (SELIC − IPCA)</span>
-    </div>
-    <div class="calc-corpo">
-
-      <div class="grupo">
-        <label class="rot" for="nov-valores">Valores a corrigir (R$)
-          <span class="rot-dica">Um valor por linha.</span>
-        </label>
-        <textarea class="campo" id="nov-valores" placeholder="1000,00&#10;5000.50"></textarea>
-      </div>
-
-      <div class="grade-datas">
-        <div class="grupo">
-          <label class="rot" for="nov-inicio">Data de início</label>
-          <input type="date" class="campo" id="nov-inicio">
-        </div>
-        <div class="grupo">
-          <label class="rot" for="nov-fim">Data de fim</label>
-          <input type="date" class="campo" id="nov-fim">
-        </div>
-      </div>
-
-      <div class="grupo">
-        <label class="rot" for="nov-modo">O que calcular?</label>
-        <select class="campo" id="nov-modo">
-          <option value="completo">Correção (IPCA) + Juros (Taxa Legal SELIC−IPCA)</option>
-          <option value="so-correcao">Apenas correção monetária pelo IPCA</option>
-          <option value="so-juros">Apenas Taxa Legal de Juros (SELIC−IPCA)</option>
-        </select>
-      </div>
-
-      <div class="linha-btns">
-        <button class="btn-calc" onclick="calcularNovoRegime()">Calcular</button>
-        <button class="btn-limpar" onclick="limparSecao('nov')">Limpar</button>
-      </div>
-      <div class="area-res" id="resultado-nov"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════
-     § 05 — COMPARATIVO
-══════════════════════════════════════════════════ -->
-<section class="secao" id="comparativo">
-  <h2 class="tit-sec">Comparativo entre os Regimes</h2>
-  <div class="linha-dec"></div>
-  <p class="sub-sec">Calcule o mesmo valor sob os diferentes critérios e compare os resultados</p>
-
-  <div class="card-calc">
-    <div class="calc-cab">
-      <span class="calc-tit">§ 05 — Calculadora Comparativa</span>
-    </div>
-    <div class="calc-corpo">
-      <div class="grupo">
-        <label class="rot" for="cmp-valor">Valor a comparar (R$)
-          <span class="rot-dica">Apenas um valor para o comparativo.</span>
-        </label>
-        <input type="text" class="campo" id="cmp-valor" placeholder="10000,00">
-      </div>
-      <div class="grade-datas">
-        <div class="grupo">
-          <label class="rot" for="cmp-inicio">Data de início</label>
-          <input type="date" class="campo" id="cmp-inicio">
-        </div>
-        <div class="grupo">
-          <label class="rot" for="cmp-fim">Data de fim</label>
-          <input type="date" class="campo" id="cmp-fim">
-        </div>
-      </div>
-      <div class="linha-btns">
-        <button class="btn-calc" onclick="calcularComparativo()">Calcular Comparativo</button>
-        <button class="btn-limpar" onclick="limparSecao('cmp')">Limpar</button>
-      </div>
-      <div class="area-res" id="resultado-cmp"></div>
-    </div>
+  <div class="box-info">
+    <div class="rot-info">Situações Práticas — quando aplicar cada regra?</div>
+    <p><strong>Sem correção e sem juros no contrato:</strong> Correção = IPCA · Juros = SELIC − IPCA</p>
+    <p><strong>Com IGP-M para correção, sem taxa de juros:</strong> Correção = IGP-M · Juros = SELIC − IPCA (a dedução sempre usa o IPCA mesmo que a correção seja outro índice)</p>
+    <p><strong>Sem correção, com juros de 1% a.m.:</strong> Correção = IPCA · Juros = 1% a.m. (conforme convencionado)</p>
+    <p><strong>Com IGP-M e 1% a.m.:</strong> Correção = IGP-M · Juros = 1% a.m. — a lei não interfere quando ambos estão definidos.</p>
   </div>
 </section>
 
 </main>
 
-<footer class="rodape">
-  <p><strong>Referências Legais:</strong> Lei nº 14.905, de 28 de junho de 2024 · Resolução CMN nº 5.171/2024 · CC/2002, arts. 389, 406 e 406-A · RE 1.558.191/STF · STJ Tema Repetitivo 1.368</p>
-  <p style="margin-top:5px"><strong>Referências Acadêmicas:</strong> FISHER, Irving. The Theory of Interest. New York: Macmillan, 1930. · Séries BACEN 29541 e 29542 — bcb.gov.br</p>
-  <p style="margin-top:7px">Material didático exclusivo para fins acadêmicos — Universidade Federal de Lavras · Faculdade de Direito</p>
-  <p style="margin-top:4px;font-size:.7rem">Os índices utilizados nas calculadoras são estimativas didáticas. Não utilize para fins jurídicos sem verificação dos índices oficiais.</p>
+<footer class="footer">
+  <p><strong>Referências Legais:</strong> Lei nº 14.905, de 28 de junho de 2024 · Resolução CMN nº 5.171/2024 · CC/2002, arts. 389, 406 e §1º · RE 1.558.191/STF · STJ Tema Repetitivo 1.368</p>
+  <p style="margin-top:4px"><strong>Fontes de Índices:</strong> BACEN Séries 29541 (SELIC) e 29542 (IPCA para Taxa Legal) · IBGE (IPCA/INPC) · FGV (IGP-M)</p>
+  <p style="margin-top:6px">Material didático — Universidade Federal de Lavras · Faculdade de Direito · Os índices são estimativas para fins acadêmicos.</p>
 </footer>
 
 <script>
 /* ════════════════════════════════════════════════════
-   TABELAS DE ÍNDICES ANUAIS (ESTIMATIVAS DIDÁTICAS)
-   — Não usar em processos —
+   ÍNDICES HISTÓRICOS — ESTIMATIVAS DIDÁTICAS
+   Não utilizar em processos reais
 ════════════════════════════════════════════════════ */
 
-// SELIC anual efetiva estimada
-var tabelaSelicAnual = {
-  2010:0.1000,2011:0.1175,2012:0.0725,2013:0.0975,
-  2014:0.1140,2015:0.1325,2016:0.1390,2017:0.0700,
-  2018:0.0640,2019:0.0559,2020:0.0228,2021:0.0875,
-  2022:0.1376,2023:0.1175,2024:0.1065,2025:0.1425
+// IPCA mensal estimado por ano (taxa anual → convertida para mensal na hora do cálculo)
+var IPCA_ANUAL = {
+  2000:0.0597,2001:0.0767,2002:0.1253,2003:0.0930,2004:0.0760,2005:0.0569,
+  2006:0.0314,2007:0.0445,2008:0.0590,2009:0.0431,2010:0.0591,2011:0.0650,
+  2012:0.0583,2013:0.0591,2014:0.0640,2015:0.1067,2016:0.0629,2017:0.0295,
+  2018:0.0375,2019:0.0431,2020:0.0452,2021:0.1006,2022:0.0547,2023:0.0462,
+  2024:0.0483,2025:0.0513,2026:0.0600
 };
 
-// IPCA anual estimado
-var tabelaIpcaAnual = {
-  2010:0.0591,2011:0.0650,2012:0.0583,2013:0.0591,
-  2014:0.0640,2015:0.1067,2016:0.0629,2017:0.0295,
-  2018:0.0375,2019:0.0431,2020:0.0452,2021:0.1006,
-  2022:0.0547,2023:0.0462,2024:0.0483,2025:0.0513
+var INPC_ANUAL = {
+  2000:0.0596,2001:0.0936,2002:0.1437,2003:0.0878,2004:0.0676,2005:0.0505,
+  2006:0.0280,2007:0.0535,2008:0.0645,2009:0.0466,2010:0.0628,2011:0.0628,
+  2012:0.0607,2013:0.0556,2014:0.0651,2015:0.1120,2016:0.0661,2017:0.0202,
+  2018:0.0351,2019:0.0438,2020:0.0552,2021:0.1062,2022:0.0551,2023:0.0393,
+  2024:0.0487,2025:0.0510,2026:0.0610
 };
 
-// INPC anual estimado
-var tabelaInpcAnual = {
-  2010:0.0628,2011:0.0628,2012:0.0607,2013:0.0556,
-  2014:0.0651,2015:0.1120,2016:0.0661,2017:0.0202,
-  2018:0.0351,2019:0.0438,2020:0.0552,2021:0.1062,
-  2022:0.0551,2023:0.0393,2024:0.0487,2025:0.0510
+var IGPM_ANUAL = {
+  2000:0.0977,2001:0.1032,2002:0.2548,2003:0.0842,2004:0.1222,2005:0.0123,
+  2006:0.0382,2007:0.0745,2008:0.0954,2009:-0.0143,2010:0.1132,2011:0.0530,
+  2012:0.0781,2013:0.0545,2014:0.0382,2015:0.1055,2016:0.0726,2017:-0.0053,
+  2018:0.0751,2019:0.0729,2020:0.2307,2021:0.1748,2022:0.0548,2023:-0.0525,
+  2024:0.0612,2025:0.0620,2026:0.0650
 };
 
-// IGP-M anual estimado
-var tabelaIgpmAnual = {
-  2010:0.1132,2011:0.0530,2012:0.0781,2013:0.0545,
-  2014:0.0382,2015:0.1055,2016:0.0726,2017:-0.0053,
-  2018:0.0751,2019:0.0729,2020:0.2307,2021:0.1748,
-  2022:0.0548,2023:-0.0525,2024:0.0612,2025:0.0620
+var SELIC_ANUAL = {
+  2000:0.1764,2001:0.1732,2002:0.1903,2003:0.2330,2004:0.1616,2005:0.1924,
+  2006:0.1500,2007:0.1180,2008:0.1238,2009:0.0993,2010:0.1000,2011:0.1175,
+  2012:0.0725,2013:0.0975,2014:0.1140,2015:0.1325,2016:0.1390,2017:0.0700,
+  2018:0.0640,2019:0.0559,2020:0.0228,2021:0.0875,2022:0.1376,2023:0.1175,
+  2024:0.1065,2025:0.1425,2026:0.1475
 };
 
-// Taxa Legal mensal estimada (SELIC mensal - IPCA-15 mês anterior)
-// Aqui usamos a diferença anual simplificada convertida para mensal (didático)
-// Na prática real: série BACEN 29543
-var tabelaTaxaLegalAnual = {};
-(function gerarTaxaLegal() {
-  var anos = Object.keys(tabelaSelicAnual).map(Number);
-  for (var i = 0; i < anos.length; i++) {
-    var ano = anos[i];
-    var selicMensal = Math.pow(1 + tabelaSelicAnual[ano], 1/12) - 1;
-    var ipcaMensal  = Math.pow(1 + tabelaIpcaAnual[ano], 1/12) - 1;
-    // Taxa Legal mensal = max(SELIC_mensal - IPCA_mensal, 0)
-    var taxaLegalMensal = Math.max(selicMensal - ipcaMensal, 0);
-    // Guardamos o valor mensal diretamente no objeto
-    tabelaTaxaLegalAnual[ano] = taxaLegalMensal; // já é mensal
-  }
-})();
-
-/* ════════════════════════════════════════════════════
-   FUNÇÕES UTILITÁRIAS
-════════════════════════════════════════════════════ */
-
-function converterParaNumero(texto) {
-  return parseFloat(texto.trim().replace(/\./g,'').replace(',','.'));
+// Taxa Legal mensal pré-calculada (SELIC_mens - IPCA_mens, mínimo 0)
+// Em produção: usar série BACEN 29543 diretamente
+function getTaxaLegalMensal(ano) {
+  var selicA = getAnual(SELIC_ANUAL, ano);
+  var ipcaA  = getAnual(IPCA_ANUAL, ano);
+  var selicM = Math.pow(1 + selicA, 1/12) - 1;
+  var ipcaM  = Math.pow(1 + ipcaA,  1/12) - 1;
+  return Math.max(selicM - ipcaM, 0);
 }
 
-function formatarMoeda(valor) {
-  return 'R$ ' + valor.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-}
-
-function formatarPct(valorDecimal) {
-  return (valorDecimal * 100).toFixed(4) + '%';
-}
-
-function parsearLinhas(textarea) {
-  var valores = [];
-  var linhas = textarea.split('\n');
-  for (var i = 0; i < linhas.length; i++) {
-    var linha = linhas[i].trim();
-    if (!linha) continue;
-    var n = converterParaNumero(linha);
-    if (!isNaN(n) && n > 0) valores.push(n);
-  }
-  return valores;
-}
-
-function taxaMensalEquivalente(taxaAnual) {
-  return Math.pow(1 + taxaAnual, 1/12) - 1;
-}
-
-function taxaAnualDoAno(tabela, ano) {
+function getAnual(tabela, ano) {
   if (tabela[ano] !== undefined) return tabela[ano];
-  var anos = Object.keys(tabela).map(Number).sort(function(a,b){return a-b;});
+  var anos = Object.keys(tabela).map(Number).sort(function(a,b){return a-b});
   if (ano < anos[0]) return tabela[anos[0]];
   return tabela[anos[anos.length-1]];
 }
 
-function obterTaxaLegalMensal(ano) {
-  // tabelaTaxaLegalAnual já armazena o valor mensal
-  if (tabelaTaxaLegalAnual[ano] !== undefined) return tabelaTaxaLegalAnual[ano];
-  var anos = Object.keys(tabelaTaxaLegalAnual).map(Number).sort(function(a,b){return a-b;});
-  if (ano < anos[0]) return tabelaTaxaLegalAnual[anos[0]];
-  return tabelaTaxaLegalAnual[anos[anos.length-1]];
+function getMensalEquiv(taxaAnual) {
+  return Math.pow(1 + taxaAnual, 1/12) - 1;
+}
+
+function getMensalIndice(tipo, ano) {
+  if (tipo === 'ipca' || tipo === 'tjdft-depois') return getMensalEquiv(getAnual(IPCA_ANUAL, ano));
+  if (tipo === 'inpc' || tipo === 'tjdft-antes')  return getMensalEquiv(getAnual(INPC_ANUAL, ano));
+  if (tipo === 'igpm') return getMensalEquiv(getAnual(IGPM_ANUAL, ano));
+  if (tipo === 'selic-unica') return getMensalEquiv(getAnual(SELIC_ANUAL, ano));
+  return getMensalEquiv(getAnual(IPCA_ANUAL, ano));
 }
 
 /* ════════════════════════════════════════════════════
-   CÁLCULO DO FATOR COMPOSTO MÊS A MÊS (para IPCA, SELIC, índices)
-   Retorna { fator, log[] }
+   PARSER / FORMATAÇÃO
 ════════════════════════════════════════════════════ */
 
-function calcularFatorCompostoComLog(dataIni, dataFim, tabelaAnual, rotulo) {
-  var fator = 1.0;
-  var logLinhas = [];
-  var anoAt = dataIni.getFullYear();
-  var mesAt = dataIni.getMonth();
-  var anoFm = dataFim.getFullYear();
-  var mesFm = dataFim.getMonth();
-  var nomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-
-  while (anoAt < anoFm || (anoAt === anoFm && mesAt <= mesFm)) {
-    var taxaAnual = taxaAnualDoAno(tabelaAnual, anoAt);
-    var taxaMens = taxaMensalEquivalente(taxaAnual);
-    fator *= (1 + taxaMens);
-    logLinhas.push(
-      nomes[mesAt] + '/' + anoAt +
-      '  ' + rotulo + '_anual=' + (taxaAnual*100).toFixed(2) + '%' +
-      '  taxa_mensal=' + formatarPct(taxaMens) +
-      '  fator_acumulado=' + fator.toFixed(8)
-    );
-    mesAt++;
-    if (mesAt > 11) { mesAt = 0; anoAt++; }
-  }
-  return { fator: fator, log: logLinhas };
+function parseMoeda(s) {
+  if (!s) return NaN;
+  return parseFloat(s.trim().replace(/\./g,'').replace(',','.'));
 }
 
-/* ════════════════════════════════════════════════════
-   CÁLCULO DA TAXA LEGAL EM JUROS SIMPLES
-   Retorna { somaTaxas, log[] }
-════════════════════════════════════════════════════ */
-
-function calcularTaxaLegalSimplesComLog(dataIni, dataFim) {
-  var somaTaxas = 0;
-  var logLinhas = [];
-  var anoAt = dataIni.getFullYear();
-  var mesAt = dataIni.getMonth();
-  var anoFm = dataFim.getFullYear();
-  var mesFm = dataFim.getMonth();
-  var nomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-
-  while (anoAt < anoFm || (anoAt === anoFm && mesAt <= mesFm)) {
-    var taxaMensLegal = obterTaxaLegalMensal(anoAt);
-    var selicMens = taxaMensalEquivalente(taxaAnualDoAno(tabelaSelicAnual, anoAt));
-    var ipcaMens  = taxaMensalEquivalente(taxaAnualDoAno(tabelaIpcaAnual,  anoAt));
-    somaTaxas += taxaMensLegal;
-    logLinhas.push(
-      nomes[mesAt] + '/' + anoAt +
-      '  selic_mens=' + formatarPct(selicMens) +
-      '  ipca_mens=' + formatarPct(ipcaMens) +
-      '  taxa_legal_mens=' + formatarPct(taxaMensLegal) +
-      '  soma_acumulada=' + formatarPct(somaTaxas)
-    );
-    mesAt++;
-    if (mesAt > 11) { mesAt = 0; anoAt++; }
-  }
-  return { somaTaxas: somaTaxas, log: logLinhas };
-}
-
-/* ════════════════════════════════════════════════════
-   VALIDAÇÃO DE DATAS
-════════════════════════════════════════════════════ */
-
-function validarDatas(strIni, strFim) {
-  if (!strIni || !strFim) return { erro: 'Preencha as datas de início e fim.' };
-  var p1 = strIni.split('-');
-  var p2 = strFim.split('-');
-  var di = new Date(+p1[0], +p1[1]-1, +p1[2]);
-  var df = new Date(+p2[0], +p2[1]-1, +p2[2]);
-  if (isNaN(di.getTime()) || isNaN(df.getTime())) return { erro: 'Datas inválidas.' };
-  if (di >= df) return { erro: 'A data de início deve ser anterior à data de fim.' };
-  return { di: di, df: df };
-}
-
-/* ════════════════════════════════════════════════════
-   GERAÇÃO DE HTML
-════════════════════════════════════════════════════ */
-
-function gerarHtmlResumo(di, df, descricao, itensExtras) {
-  var meses = (df.getFullYear()-di.getFullYear())*12 + (df.getMonth()-di.getMonth()) + 1;
-  var html = '<div class="resumo-calc">' +
-    '<div><div class="res-tit">Período</div><div class="res-val">' + meses + ' meses</div></div>';
-  for (var i = 0; i < itensExtras.length; i++) {
-    html += '<div><div class="res-tit">' + itensExtras[i].tit + '</div><div class="res-val">' + itensExtras[i].val + '</div></div>';
-  }
-  html += '<div><div class="res-tit">Critério</div><div class="res-val" style="font-size:.74rem;line-height:1.3">' + descricao + '</div></div>';
-  html += '</div>';
-  return html;
-}
-
-function gerarHtmlTabela(valores, fatorCorrecao, taxaJurosSimples) {
-  // fatorCorrecao: multiplicador para o principal (IPCA/SELIC/índice)
-  // taxaJurosSimples: soma das taxas mensais em juros simples (ou 0 se não aplicável)
-  var linhas = '';
-  var somaOrig = 0, somaCor = 0, somaFin = 0;
-
-  for (var i = 0; i < valores.length; i++) {
-    var orig = valores[i];
-    var corrigido = orig * fatorCorrecao;
-    var juros = corrigido * taxaJurosSimples;
-    var final = corrigido + juros;
-    somaOrig += orig; somaCor += corrigido; somaFin += final;
-
-    linhas += '<tr>' +
-      '<td class="v-orig">' + formatarMoeda(orig) + '</td>' +
-      '<td class="v-final">' + formatarMoeda(corrigido) + '</td>' +
-      (taxaJurosSimples > 0 ? '<td class="v-acr">+ ' + formatarMoeda(juros) + '</td>' : '') +
-      '<td class="v-final">' + formatarMoeda(final) + '</td>' +
-      '<td class="v-fat">× ' + fatorCorrecao.toFixed(5) + (taxaJurosSimples > 0 ? ' + ' + formatarPct(taxaJurosSimples) : '') + '</td>' +
-      '</tr>';
-  }
-
-  if (valores.length > 1) {
-    linhas += '<tr style="border-top:2px solid var(--creme-escuro);font-weight:700;">' +
-      '<td class="v-orig">TOTAL: ' + formatarMoeda(somaOrig) + '</td>' +
-      '<td class="v-final">' + formatarMoeda(somaCor) + '</td>' +
-      (taxaJurosSimples > 0 ? '<td class="v-acr">+ ' + formatarMoeda(somaFin-somaCor) + '</td>' : '') +
-      '<td class="v-final">' + formatarMoeda(somaFin) + '</td>' +
-      '<td></td></tr>';
-  }
-
-  var cabJuros = taxaJurosSimples > 0 ? '<th>Juros</th>' : '';
-  return '<div class="tabela-wrap"><table class="tabela-res"><thead><tr>' +
-    '<th>Valor Original</th><th>Após Correção</th>' + cabJuros +
-    '<th>Total Final</th><th>Fator/Taxa</th>' +
-    '</tr></thead><tbody>' + linhas + '</tbody></table></div>';
-}
-
-function gerarHtmlBotaoAudit(idUnico, linhasLog, rotulo) {
-  var id = 'audit-' + idUnico;
-  return '<button class="btn-audit" onclick="alternarAuditoria(\'' + id + '\')">' +
-    '🔍 ' + (rotulo || 'Auditoria mês a mês') + ' (' + linhasLog.length + ' meses)' +
-    '</button>' +
-    '<div class="bloco-audit" id="' + id + '">' +
-    '<div class="audit-tit">Auditoria detalhada</div>' +
-    '<div class="audit-lin">' + linhasLog.join('\n') + '</div>' +
-    '</div>';
-}
-
-function exibirResultado(prefixo, html) {
-  var el = document.getElementById('resultado-' + prefixo);
-  el.innerHTML = html;
-  el.classList.add('vis');
-}
-
-function exibirErro(prefixo, msg) {
-  var el = document.getElementById('resultado-' + prefixo);
-  el.innerHTML = '<div class="msg-erro">❌ ' + msg + '</div>';
-  el.classList.add('vis');
-}
-
-/* ════════════════════════════════════════════════════
-   § 03 — CALCULADORA REGIME ANTERIOR
-════════════════════════════════════════════════════ */
-
-function atualizarCamposAnteriores() { /* sem campos extras por ora */ }
-
-function calcularAnterior() {
-  var textoVal = document.getElementById('ant-valores').value;
-  var strIni   = document.getElementById('ant-inicio').value;
-  var strFim   = document.getElementById('ant-fim').value;
-  var modo     = document.getElementById('ant-modo').value;
-
-  var valores = parsearLinhas(textoVal);
-  if (!valores.length) { exibirErro('ant', 'Informe pelo menos um valor maior que zero.'); return; }
-
-  var datas = validarDatas(strIni, strFim);
-  if (datas.erro) { exibirErro('ant', datas.erro); return; }
-
-  var fatorCorrecao = 1.0;
-  var taxaJurosSimples = 0;
-  var descricao = '';
-  var logCorrecao = [];
-  var logJuros = [];
-
-  if (modo === 'selic-unica') {
-    var r = calcularFatorCompostoComLog(datas.di, datas.df, tabelaSelicAnual, 'SELIC');
-    fatorCorrecao = r.fator;
-    taxaJurosSimples = 0;
-    logCorrecao = r.log;
-    descricao = 'SELIC taxa única (juros+correção)';
-  } else if (modo === '1pct') {
-    var meses = (datas.df.getFullYear()-datas.di.getFullYear())*12+(datas.df.getMonth()-datas.di.getMonth())+1;
-    fatorCorrecao = 1.0;
-    taxaJurosSimples = 0.01 * meses;
-    descricao = '1% a.m. — juros simples (' + meses + ' meses × 1% = ' + (taxaJurosSimples*100).toFixed(2) + '%)';
-    var nomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-    var a2 = datas.di.getFullYear(); var m2 = datas.di.getMonth();
-    var soma = 0;
-    for (var i = 0; i < meses; i++) {
-      soma += 0.01;
-      logJuros.push(nomes[m2]+'/'+a2+'  taxa_mes=1,0000%  soma_acumulada='+formatarPct(soma));
-      m2++; if (m2>11){m2=0;a2++;}
-    }
+function parseData(s) {
+  if (!s || !s.trim()) return null;
+  var s2 = s.trim();
+  // aceita dd/mm/aaaa ou aaaa-mm-dd
+  var p;
+  if (s2.includes('/')) {
+    p = s2.split('/');
+    if (p.length !== 3) return null;
+    return new Date(+p[2], +p[1]-1, +p[0]);
   } else {
-    // modos com correção separada + 1% a.m.
-    var tabelaCorr = tabelaIpcaAnual;
-    var nomeCorr = 'IPCA';
-    if (modo === 'correcao-inpc' || modo === 'so-inpc') { tabelaCorr = tabelaInpcAnual; nomeCorr = 'INPC'; }
-    if (modo === 'correcao-igpm' || modo === 'so-igpm') { tabelaCorr = tabelaIgpmAnual; nomeCorr = 'IGP-M'; }
+    p = s2.split('-');
+    if (p.length !== 3) return null;
+    return new Date(+p[0], +p[1]-1, +p[2]);
+  }
+}
 
-    var rc = calcularFatorCompostoComLog(datas.di, datas.df, tabelaCorr, nomeCorr);
-    fatorCorrecao = rc.fator;
-    logCorrecao = rc.log;
+function fmtMoeda(v) {
+  return 'R$ ' + v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
 
-    if (modo.startsWith('correcao-')) {
-      // 1% a.m. incide sobre o principal JÁ corrigido (convenção didática)
-      var meses2 = (datas.df.getFullYear()-datas.di.getFullYear())*12+(datas.df.getMonth()-datas.di.getMonth())+1;
-      taxaJurosSimples = 0.01 * meses2;
-      descricao = nomeCorr + ' (correção) + 1% a.m. juros simples';
-      var nomes2 = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-      var a3 = datas.di.getFullYear(); var m3 = datas.di.getMonth();
-      var soma2 = 0;
-      for (var j = 0; j < meses2; j++) {
-        soma2 += 0.01;
-        logJuros.push(nomes2[m3]+'/'+a3+'  taxa_mes=1,0000%  soma_acum='+formatarPct(soma2));
-        m3++; if (m3>11){m3=0;a3++;}
-      }
-    } else {
-      descricao = 'Apenas correção pelo ' + nomeCorr;
+function fmtPct(v) {
+  return (v*100).toFixed(4) + '%';
+}
+
+function fmtData(d) {
+  return d.getDate().toString().padStart(2,'0') + '/' +
+         (d.getMonth()+1).toString().padStart(2,'0') + '/' +
+         d.getFullYear();
+}
+
+function mesesEntre(di, df) {
+  return (df.getFullYear()-di.getFullYear())*12 + (df.getMonth()-di.getMonth()) + 1;
+}
+
+var VIGENCIA_NOVA_LEI = new Date(2024, 7, 1); // ago/2024 = mês 8 = index 7
+
+/* ════════════════════════════════════════════════════
+   GERENCIAMENTO DE VALORES (LINHAS DINÂMICAS)
+════════════════════════════════════════════════════ */
+
+var contadorValores = 0;
+
+function adicionarValor() {
+  contadorValores++;
+  var id = 'val-' + contadorValores;
+  var div = document.createElement('div');
+  div.className = 'valor-row';
+  div.id = id;
+  div.innerHTML =
+    '<div class="campo-grp">' +
+      '<label class="campo-rot">Valor (R$)</label>' +
+      '<input class="f" type="text" id="' + id + '-valor" placeholder="0,00">' +
+    '</div>' +
+    '<div class="campo-grp">' +
+      '<label class="campo-rot">Data do valor</label>' +
+      '<input class="f" type="text" id="' + id + '-data" placeholder="dd/mm/aaaa">' +
+    '</div>' +
+    '<div class="campo-grp">' +
+      '<label class="campo-rot">Descrição (opcional)</label>' +
+      '<input class="f" type="text" id="' + id + '-desc" placeholder="Descrição">' +
+    '</div>' +
+    '<div class="campo-grp">' +
+      '<label class="campo-rot" style="opacity:0">x</label>' +
+      '<button class="btn-rm" onclick="removerValor(\'' + id + '\')" title="Remover">✕ Remover</button>' +
+    '</div>';
+  document.getElementById('lista-valores').appendChild(div);
+}
+
+function removerValor(id) {
+  var el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function atualizarCamposJuros() {
+  var tipo = document.getElementById('f-juros-tipo').value;
+  document.getElementById('campo-pct-fixo').style.display = tipo === 'fixo' ? 'block' : 'none';
+}
+
+function limparCalculadora() {
+  document.getElementById('lista-valores').innerHTML = '';
+  contadorValores = 0;
+  document.getElementById('resultado-principal').classList.remove('on');
+  document.getElementById('resultado-principal').innerHTML = '';
+  document.getElementById('f-processo').value = '';
+  document.getElementById('f-credor').value = '';
+  document.getElementById('f-devedor').value = '';
+  document.getElementById('f-datafim').value = '';
+  adicionarValor();
+}
+
+/* ════════════════════════════════════════════════════
+   CÁLCULO PRINCIPAL
+════════════════════════════════════════════════════ */
+
+function executarCalculo() {
+  // — coleta dados do formulário —
+  var processo  = document.getElementById('f-processo').value.trim();
+  var credor    = document.getElementById('f-credor').value.trim();
+  var devedor   = document.getElementById('f-devedor').value.trim();
+  var indiceOpc = document.getElementById('f-indice').value;
+  var jurosTipo = document.getElementById('f-juros-tipo').value;
+  var jurosInc  = document.getElementById('f-juros-incidencia').value;
+  var jurosPct  = parseFloat(document.getElementById('f-juros-pct').value) / 100;
+  var multaTipo = document.getElementById('f-multa-tipo').value;
+  var multaVal  = parseFloat(document.getElementById('f-multa-valor').value) / 100;
+  var multaDesc = document.getElementById('f-multa-desc').value.trim();
+
+  var strDataFim = document.getElementById('f-datafim').value.trim();
+  var dataFimGlobal = strDataFim ? parseData(strDataFim) : new Date(2026,3,14); // 14/04/2026
+  if (!dataFimGlobal || isNaN(dataFimGlobal.getTime())) {
+    mostrarErro('resultado-principal', 'Data final inválida. Use dd/mm/aaaa.');
+    return;
+  }
+
+  // — coleta valores —
+  var linhas = document.querySelectorAll('.valor-row');
+  if (!linhas.length) {
+    mostrarErro('resultado-principal', 'Adicione pelo menos um valor para calcular.');
+    return;
+  }
+
+  var itens = [];
+  for (var i = 0; i < linhas.length; i++) {
+    var rowId = linhas[i].id;
+    var vStr = document.getElementById(rowId+'-valor').value;
+    var dStr = document.getElementById(rowId+'-data').value;
+    var desc = document.getElementById(rowId+'-desc').value.trim();
+    var v = parseMoeda(vStr);
+    var d = parseData(dStr);
+    if (isNaN(v) || v <= 0) { mostrarErro('resultado-principal','Valor inválido na linha '+(i+1)+'. Use formato: 1.000,00'); return; }
+    if (!d || isNaN(d.getTime())) { mostrarErro('resultado-principal','Data inválida na linha '+(i+1)+'. Use dd/mm/aaaa'); return; }
+    if (d > dataFimGlobal) { mostrarErro('resultado-principal','Data do valor '+(i+1)+' é posterior à data final do cálculo.'); return; }
+    itens.push({ principal: v, dataInicio: d, desc: desc || ('Valor ' + (i+1)) });
+  }
+
+  // — processar cada item —
+  var resultados = [];
+  var memoriaGlobal = [];
+
+  for (var k = 0; k < itens.length; k++) {
+    var item = itens[k];
+    var di = item.dataInicio;
+    var df = dataFimGlobal;
+    var principal = item.principal;
+
+    // ---- CORREÇÃO MONETÁRIA ----
+    var resultCorr = calcularCorrecao(di, df, indiceOpc, principal);
+
+    // ---- JUROS DE MORA ----
+    var dataIniJuros = di; // padrão: data do valor
+    if (jurosInc === 'sem' || jurosTipo === 'sem') {
+      // sem juros
     }
+
+    var resultJuros = calcularJuros(di, df, jurosTipo, jurosPct, principal, resultCorr.valorCorrigido);
+
+    // ---- MULTA ----
+    var valorMulta = 0;
+    var descMulta = '';
+    if (multaTipo === 'pct') { valorMulta = principal * multaVal; descMulta = (multaVal*100).toFixed(2) + '% sobre principal'; }
+    else if (multaTipo === 'monetaria') { valorMulta = multaVal * 10000; descMulta = multaDesc; } // neste caso o campo é valor, não %
+
+    var totalItem = resultCorr.valorCorrigido + resultJuros.valorJuros + valorMulta;
+
+    resultados.push({
+      desc: item.desc,
+      principal: principal,
+      dataInicio: di,
+      dataFim: df,
+      corrigido: resultCorr.valorCorrigido,
+      juros: resultJuros.valorJuros,
+      multa: valorMulta,
+      total: totalItem,
+      logCorr: resultCorr.log,
+      logJuros: resultJuros.log,
+      premissasCorr: resultCorr.premissas,
+      premissasJuros: resultJuros.premissas,
+      fatorCorr: resultCorr.fator,
+      taxaJurosTot: resultJuros.taxaTotal,
+      regimesCorr: resultCorr.regimes,
+      regimesJuros: resultJuros.regimes
+    });
   }
 
-  var variacaoCorrecao = (fatorCorrecao - 1) * 100;
-  var extrasResumo = [
-    { tit: 'Fator correção', val: fatorCorrecao.toFixed(6) },
-    { tit: 'Variação correção', val: '+' + variacaoCorrecao.toFixed(4) + '%' }
-  ];
-  if (taxaJurosSimples > 0) {
-    extrasResumo.push({ tit: 'Taxa juros total', val: '+' + (taxaJurosSimples*100).toFixed(4) + '%' });
-  }
-
-  var html = gerarHtmlResumo(datas.di, datas.df, descricao, extrasResumo);
-  html += gerarHtmlTabela(valores, fatorCorrecao, taxaJurosSimples);
-  if (logCorrecao.length) html += gerarHtmlBotaoAudit('ant-corr', logCorrecao, 'Auditoria — Correção');
-  if (logJuros.length)    html += gerarHtmlBotaoAudit('ant-jur',  logJuros,   'Auditoria — Juros');
-
-  exibirResultado('ant', html);
+  renderizarResultado(resultados, {
+    processo: processo, credor: credor, devedor: devedor,
+    dataFim: dataFimGlobal, indice: indiceOpc,
+    jurosTipo: jurosTipo, jurosPct: jurosPct,
+    multaTipo: multaTipo, multaDesc: multaDesc
+  });
 }
 
 /* ════════════════════════════════════════════════════
-   § 04 — CALCULADORA NOVO REGIME
+   CÁLCULO DE CORREÇÃO MONETÁRIA
 ════════════════════════════════════════════════════ */
 
-function calcularNovoRegime() {
-  var textoVal = document.getElementById('nov-valores').value;
-  var strIni   = document.getElementById('nov-inicio').value;
-  var strFim   = document.getElementById('nov-fim').value;
-  var modo     = document.getElementById('nov-modo').value;
+function calcularCorrecao(di, df, indiceOpc, principal) {
+  var fator = 1.0;
+  var log = [];
+  var regimes = [];
+  var premissas = [];
+  var anoAt = di.getFullYear();
+  var mesAt = di.getMonth();
+  var anoFm = df.getFullYear();
+  var mesFm = df.getMonth();
+  var nomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
-  var valores = parsearLinhas(textoVal);
-  if (!valores.length) { exibirErro('nov', 'Informe pelo menos um valor maior que zero.'); return; }
+  var ultimoRegime = '';
 
-  var datas = validarDatas(strIni, strFim);
-  if (datas.erro) { exibirErro('nov', datas.erro); return; }
+  while (anoAt < anoFm || (anoAt === anoFm && mesAt <= mesFm)) {
+    var dataAtual = new Date(anoAt, mesAt, 1);
+    var tipoMes;
 
-  var fatorCorrecao = 1.0;
-  var taxaJuros = 0;
-  var logCorrecao = [];
-  var logJuros = [];
-  var descricao = '';
+    // TJDFT: INPC até ago/2024, IPCA a partir de set/2024
+    if (indiceOpc === 'tjdft') {
+      tipoMes = dataAtual < VIGENCIA_NOVA_LEI ? 'inpc' : 'ipca';
+    } else {
+      tipoMes = indiceOpc; // ipca, inpc, igpm, selic-unica
+    }
 
-  // Correção pelo IPCA (composta)
-  if (modo === 'completo' || modo === 'so-correcao') {
-    var rc = calcularFatorCompostoComLog(datas.di, datas.df, tabelaIpcaAnual, 'IPCA');
-    fatorCorrecao = rc.fator;
-    logCorrecao = rc.log;
+    var taxaMens = getMensalIndice(tipoMes, anoAt);
+    fator *= (1 + taxaMens);
+
+    var regimeAtual = tipoMes.toUpperCase();
+    if (regimeAtual !== ultimoRegime) {
+      regimes.push({ mes: nomes[mesAt]+'/'+anoAt, regime: regimeAtual });
+      ultimoRegime = regimeAtual;
+    }
+
+    log.push(
+      nomes[mesAt]+'/'+anoAt +
+      '  índice=' + tipoMes.toUpperCase() +
+      '  taxa_mensal=' + fmtPct(taxaMens) +
+      '  fator_acum=' + fator.toFixed(8)
+    );
+
+    mesAt++;
+    if (mesAt > 11) { mesAt = 0; anoAt++; }
   }
 
-  // Taxa Legal de juros (simples)
-  if (modo === 'completo' || modo === 'so-juros') {
-    var rj = calcularTaxaLegalSimplesComLog(datas.di, datas.df);
-    taxaJuros = rj.somaTaxas;
-    logJuros = rj.log;
-  }
+  premissas.push('Índice selecionado: ' + (indiceOpc === 'tjdft' ? 'TJDFT (INPC→IPCA em set/2024)' : indiceOpc.toUpperCase()));
+  premissas.push('Período da correção: ' + fmtData(di) + ' a ' + fmtData(df));
+  premissas.push('Fator total: ' + fator.toFixed(8));
+  premissas.push('Variação total: +' + ((fator-1)*100).toFixed(4) + '%');
 
-  if (modo === 'completo') descricao = 'Correção IPCA + Taxa Legal (SELIC−IPCA) juros simples';
-  else if (modo === 'so-correcao') descricao = 'Apenas correção IPCA (sem juros)';
-  else descricao = 'Apenas Taxa Legal de Juros (SELIC−IPCA) juros simples';
-
-  var variacaoCor = (fatorCorrecao - 1) * 100;
-  var extrasResumo = [
-    { tit: 'Fator IPCA', val: fatorCorrecao.toFixed(6) },
-    { tit: 'Correção acum.', val: '+' + variacaoCor.toFixed(4) + '%' }
-  ];
-  if (taxaJuros > 0) {
-    extrasResumo.push({ tit: 'Taxa Legal acum.', val: '+' + (taxaJuros*100).toFixed(4) + '%' });
-  }
-
-  var html = gerarHtmlResumo(datas.di, datas.df, descricao, extrasResumo);
-  html += gerarHtmlTabela(valores, fatorCorrecao, taxaJuros);
-  if (logCorrecao.length) html += gerarHtmlBotaoAudit('nov-corr', logCorrecao, 'Auditoria — Correção IPCA');
-  if (logJuros.length)    html += gerarHtmlBotaoAudit('nov-jur',  logJuros,   'Auditoria — Taxa Legal (SELIC−IPCA)');
-
-  exibirResultado('nov', html);
-}
-
-/* ════════════════════════════════════════════════════
-   § 05 — COMPARATIVO
-════════════════════════════════════════════════════ */
-
-function calcularComparativo() {
-  var textoVal = document.getElementById('cmp-valor').value;
-  var strIni   = document.getElementById('cmp-inicio').value;
-  var strFim   = document.getElementById('cmp-fim').value;
-
-  var principal = converterParaNumero(textoVal);
-  if (isNaN(principal) || principal <= 0) { exibirErro('cmp', 'Informe um valor válido maior que zero.'); return; }
-
-  var datas = validarDatas(strIni, strFim);
-  if (datas.erro) { exibirErro('cmp', datas.erro); return; }
-
-  // 1 — SELIC taxa única (composta)
-  var r1 = calcularFatorCompostoComLog(datas.di, datas.df, tabelaSelicAnual, 'SELIC');
-  var mont1 = principal * r1.fator;
-
-  // 2 — 1% ao mês simples (sem correção separada)
-  var meses = (datas.df.getFullYear()-datas.di.getFullYear())*12+(datas.df.getMonth()-datas.di.getMonth())+1;
-  var mont2 = principal * (1 + 0.01 * meses);
-
-  // 3 — Correção IPCA (composta) + 1% a.m. simples sobre corrigido
-  var r3c = calcularFatorCompostoComLog(datas.di, datas.df, tabelaIpcaAnual, 'IPCA');
-  var corrigido3 = principal * r3c.fator;
-  var mont3 = corrigido3 * (1 + 0.01 * meses);
-
-  // 4 — Correção IGP-M + 1% a.m. simples
-  var r4c = calcularFatorCompostoComLog(datas.di, datas.df, tabelaIgpmAnual, 'IGP-M');
-  var corrigido4 = principal * r4c.fator;
-  var mont4 = corrigido4 * (1 + 0.01 * meses);
-
-  // 5 — Novo regime: Correção IPCA + Taxa Legal SELIC-IPCA (simples)
-  var r5c = calcularFatorCompostoComLog(datas.di, datas.df, tabelaIpcaAnual, 'IPCA');
-  var r5j = calcularTaxaLegalSimplesComLog(datas.di, datas.df);
-  var corrigido5 = principal * r5c.fator;
-  var mont5 = corrigido5 * (1 + r5j.somaTaxas);
-
-  var todosMonts = [mont1, mont2, mont3, mont4, mont5];
-  var maior = Math.max.apply(null, todosMonts);
-  var menor = Math.min.apply(null, todosMonts);
-
-  function card(regime, titulo, montante, acrescimo, detalhe) {
-    var destBorda = montante === maior ? ' style="border-color:var(--verde-claro);border-width:2px;"' : '';
-    var badgeMaior = montante === maior ? ' <span style="background:var(--verde-claro);color:#fff;font-size:.62rem;padding:2px 7px;border-radius:3px;font-family:var(--fonte-mono)">MAIOR</span>' : '';
-    var badgeMenor = (montante === menor && montante !== maior) ? ' <span style="background:var(--dourado);color:var(--verde-escuro);font-size:.62rem;padding:2px 7px;border-radius:3px;font-family:var(--fonte-mono)">MENOR</span>' : '';
-    return '<div class="card-regime"' + destBorda + '>' +
-      '<div class="reg-rot">' + regime + '</div>' +
-      '<div class="reg-tit">' + titulo + badgeMaior + badgeMenor + '</div>' +
-      '<div class="reg-val">' + formatarMoeda(montante) + '</div>' +
-      '<div class="reg-acr">+ ' + formatarMoeda(acrescimo) + ' de acréscimo</div>' +
-      '<div class="reg-fat">' + detalhe + '</div>' +
-      '</div>';
-  }
-
-  var htmlGrade = '<div class="grade-comp">' +
-    card('Regime anterior', 'SELIC (taxa única)', mont1, mont1-principal,
-         'Juros compostos · Fator: ' + r1.fator.toFixed(5) + ' · +' + ((r1.fator-1)*100).toFixed(2) + '%') +
-    card('Regime anterior', '1% ao mês — juros simples', mont2, mont2-principal,
-         meses + ' meses × 1% = +' + (meses*1).toFixed(2) + '%') +
-    card('Regime anterior', 'Correção IPCA + juros 1% a.m.', mont3, mont3-principal,
-         'IPCA fator ' + r3c.fator.toFixed(5) + ' + 1% s.m. juros simples') +
-    card('Regime anterior', 'Correção IGP-M + juros 1% a.m.', mont4, mont4-principal,
-         'IGP-M fator ' + r4c.fator.toFixed(5) + ' + 1% s.m. juros simples') +
-    card('Lei 14.905/2024', 'IPCA + Taxa Legal (SELIC−IPCA)', mont5, mont5-principal,
-         'Correção IPCA fator ' + r5c.fator.toFixed(5) + ' + Taxa Legal +' + (r5j.somaTaxas*100).toFixed(4) + '%') +
-    '</div>';
-
-  var diff = maior - menor;
-  var pct = ((maior / menor) - 1) * 100;
-
-  var htmlAnalise = '<div class="bloco-teoria" style="margin-top:18px;">' +
-    '<h3>Análise Automática</h3>' +
-    '<p>Valor original: <strong>' + formatarMoeda(principal) + '</strong> · Período: ' + meses + ' meses</p>' +
-    '<p>A diferença entre o maior e o menor resultado é de <strong>' + formatarMoeda(diff) + '</strong> (' + pct.toFixed(2) + '% a mais no critério mais oneroso). Isso demonstra de forma concreta o impacto da escolha do índice de atualização e a relevância jurídica da uniformização trazida pela Lei nº 14.905/2024.</p>' +
-    '<p>Note a diferença entre os regimes de juros: <em>compostos</em> (SELIC) e <em>simples</em> (1% a.m. e Taxa Legal). Em períodos longos, os juros compostos tendem a produzir montantes significativamente maiores.</p>' +
-    '</div>';
-
-  var htmlAudits = '<div style="margin-top:14px;">' +
-    gerarHtmlBotaoAudit('cmp-selic', r1.log, '[Regime ant.] Auditoria SELIC composta') +
-    '<br>' + gerarHtmlBotaoAudit('cmp-r3', r3c.log, '[Regime ant.] Auditoria IPCA') +
-    '<br>' + gerarHtmlBotaoAudit('cmp-r4', r4c.log, '[Regime ant.] Auditoria IGP-M') +
-    '<br>' + gerarHtmlBotaoAudit('cmp-nov-cor', r5c.log, '[Lei 14.905] Auditoria IPCA') +
-    '<br>' + gerarHtmlBotaoAudit('cmp-nov-jur', r5j.log, '[Lei 14.905] Auditoria Taxa Legal') +
-    '</div>';
-
-  exibirResultado('cmp', htmlGrade + htmlAnalise + htmlAudits);
-}
-
-/* ════════════════════════════════════════════════════
-   CONTROLES DE INTERFACE
-════════════════════════════════════════════════════ */
-
-function alternarAba(idSecao, btnClicado) {
-  document.querySelectorAll('.secao').forEach(function(s){ s.classList.remove('vis'); });
-  document.querySelectorAll('.btn-aba').forEach(function(b){ b.classList.remove('ativa'); });
-  document.getElementById(idSecao).classList.add('vis');
-  btnClicado.classList.add('ativa');
-  document.querySelector('.principal').scrollIntoView({ behavior:'smooth', block:'start' });
-}
-
-function limparSecao(pref) {
-  var mapa = {
-    'ant': ['ant-valores','ant-inicio','ant-fim'],
-    'nov': ['nov-valores','nov-inicio','nov-fim'],
-    'cmp': ['cmp-valor','cmp-inicio','cmp-fim']
+  return {
+    fator: fator,
+    valorCorrigido: principal * fator,
+    log: log,
+    premissas: premissas,
+    regimes: regimes
   };
-  (mapa[pref]||[]).forEach(function(id){
-    var el = document.getElementById(id); if(el) el.value = '';
-  });
-  var res = document.getElementById('resultado-' + pref);
-  if (res) { res.innerHTML = ''; res.classList.remove('vis'); }
-}
-
-function alternarAuditoria(idBloco) {
-  var el = document.getElementById(idBloco);
-  if (el) el.classList.toggle('vis');
 }
 
 /* ════════════════════════════════════════════════════
-   INICIALIZAÇÃO — datas padrão
+   CÁLCULO DE JUROS DE MORA
 ════════════════════════════════════════════════════ */
-(function inicDatas() {
-  var hoje = new Date();
-  var a = hoje.getFullYear();
-  var m = String(hoje.getMonth()+1).padStart(2,'0');
-  var d = String(hoje.getDate()).padStart(2,'0');
-  var hj = a+'-'+m+'-'+d;
-  var ini = (a-2)+'-'+m+'-'+d;
 
-  document.querySelectorAll('input[type="date"][id$="-fim"]').forEach(function(el){
-    el.value = hj; el.max = hj;
+function calcularJuros(di, df, tipo, pctFixo, principal, corrigido) {
+  var log = [];
+  var regimes = [];
+  var premissas = [];
+  var taxaTotal = 0;
+  var valorJuros = 0;
+  var nomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+  if (tipo === 'sem') {
+    return { valorJuros: 0, taxaTotal: 0, log: [], premissas: ['Sem juros configurado.'], regimes: [] };
+  }
+
+  if (tipo === 'fixo') {
+    // Juros simples fixos
+    var meses = mesesEntre(di, df);
+    taxaTotal = pctFixo * meses;
+    valorJuros = corrigido * taxaTotal;
+    premissas.push('Tipo: Percentual fixo de ' + (pctFixo*100).toFixed(2) + '% a.m. (juros simples)');
+    premissas.push('Meses: ' + meses);
+    premissas.push('Taxa total: ' + fmtPct(taxaTotal));
+    var anoA = di.getFullYear(); var mesA = di.getMonth(); var soma = 0;
+    for (var i = 0; i < meses; i++) {
+      soma += pctFixo;
+      log.push(nomes[mesA]+'/'+anoA + '  taxa='+fmtPct(pctFixo)+'  soma_acum='+fmtPct(soma));
+      mesA++; if (mesA>11){mesA=0;anoA++;}
+    }
+    regimes.push({mes: fmtData(di), regime: (pctFixo*100).toFixed(2)+'% a.m. fixo'});
+    return { valorJuros: valorJuros, taxaTotal: taxaTotal, log: log, premissas: premissas, regimes: regimes };
+  }
+
+  // — tipo === 'legal-automatico' —
+  // Aplica regra por período:
+  // até 10/01/2003: 0,5% a.m. (juros simples)
+  // 11/01/2003 a 29/08/2024: 1% a.m. (juros simples)
+  // 30/08/2024 em diante: Taxa Legal SELIC−IPCA (juros simples)
+
+  var LIMITE_05 = new Date(2003, 0, 10);  // 10/01/2003
+  var LIMITE_1  = new Date(2024, 7, 30);  // 30/08/2024
+
+  var anoAt = di.getFullYear(); var mesAt = di.getMonth();
+  var anoFm = df.getFullYear(); var mesFm = df.getMonth();
+  var ultimoReg = '';
+
+  while (anoAt < anoFm || (anoAt === anoFm && mesAt <= mesFm)) {
+    var dataAtual2 = new Date(anoAt, mesAt, 1);
+    var taxa;
+    var nomeReg;
+
+    if (dataAtual2 <= LIMITE_05) {
+      taxa = 0.005;
+      nomeReg = '0,5% a.m. (art.406 CC/1916)';
+    } else if (dataAtual2 < LIMITE_1) {
+      taxa = 0.01;
+      nomeReg = '1% a.m. (art.406 CC/2002)';
+    } else {
+      taxa = getTaxaLegalMensal(anoAt);
+      nomeReg = 'Taxa Legal SELIC−IPCA (Lei 14.905/2024)';
+    }
+
+    taxaTotal += taxa;
+
+    if (nomeReg !== ultimoReg) {
+      regimes.push({ mes: nomes[mesAt]+'/'+anoAt, regime: nomeReg });
+      ultimoReg = nomeReg;
+    }
+
+    log.push(
+      nomes[mesAt]+'/'+anoAt +
+      '  regime=' + (dataAtual2 < LIMITE_1 ? (dataAtual2 <= LIMITE_05 ? '0.5%a.m.' : '1%a.m.') : 'TaxaLegal') +
+      '  taxa=' + fmtPct(taxa) +
+      '  soma_acum=' + fmtPct(taxaTotal)
+    );
+
+    mesAt++;
+    if (mesAt > 11) { mesAt = 0; anoAt++; }
+  }
+
+  valorJuros = corrigido * taxaTotal;
+
+  premissas.push('Tipo: Juros legais automáticos (regime por período)');
+  premissas.push('Até 10/01/2003: 0,5% a.m. · 11/01/2003–29/08/2024: 1% a.m. · a partir de 30/08/2024: Taxa Legal (SELIC−IPCA)');
+  premissas.push('Regime de juros SIMPLES (somatório de taxas mensais)');
+  premissas.push('Taxa total acumulada: ' + fmtPct(taxaTotal));
+  if (regimes.length > 1) {
+    premissas.push('⚠️ PERÍODO MISTO: o cálculo combina dois ou mais regimes de juros diferentes.');
+  }
+
+  return { valorJuros: valorJuros, taxaTotal: taxaTotal, log: log, premissas: premissas, regimes: regimes };
+}
+
+/* ════════════════════════════════════════════════════
+   RENDERIZAÇÃO DO RESULTADO
+════════════════════════════════════════════════════ */
+
+function renderizarResultado(resultados, config) {
+  var totalPrincipal = 0, totalCorrigido = 0, totalJuros = 0, totalMulta = 0, totalGeral = 0;
+  resultados.forEach(function(r){
+    totalPrincipal += r.principal;
+    totalCorrigido += r.corrigido;
+    totalJuros += r.juros;
+    totalMulta += r.multa;
+    totalGeral += r.total;
   });
-  document.querySelectorAll('input[type="date"][id$="-inicio"]').forEach(function(el){
-    el.value = ini; el.max = hj;
-  });
+
+  var dataHoje = new Date();
+
+  // — CABEÇALHO DO RESULTADO —
+  var html = '<div class="result-header">' +
+    '<div class="result-header-tit">Memória de Cálculo — Atualização Monetária e Juros</div>' +
+    '<div class="result-header-sub">' +
+      'Gerado em ' + fmtData(dataHoje) +
+      (config.processo ? ' · Processo: ' + config.processo : '') +
+      (config.credor ? ' · Credor: ' + config.credor : '') +
+      (config.devedor ? ' · Devedor: ' + config.devedor : '') +
+    '</div>' +
+  '</div>';
+
+  // — RESUMO —
+  html += '<div class="resumo-grid">' +
+    '<div class="resumo-item"><div class="resumo-item-tit">Data base</div><div class="resumo-item-val">' + fmtData(config.dataFim) + '</div></div>' +
+    '<div class="resumo-item"><div class="resumo-item-tit">Principal total</div><div class="resumo-item-val">' + fmtMoeda(totalPrincipal) + '</div></div>' +
+    '<div class="resumo-item"><div class="resumo-item-tit">Após correção</div><div class="resumo-item-val">' + fmtMoeda(totalCorrigido) + '</div></div>' +
+    '<div class="resumo-item"><div class="resumo-item-tit">Juros de mora</div><div class="resumo-item-val">' + fmtMoeda(totalJuros) + '</div></div>' +
+    (totalMulta > 0 ? '<div class="resumo-item"><div class="resumo-item-tit">Multa</div><div class="resumo-item-val">' + fmtMoeda(totalMulta) + '</div></div>' : '') +
+    '<div class="resumo-item" style="background:rgba(26,58,42,.05)"><div class="resumo-item-tit">TOTAL GERAL</div><div class="resumo-item-val" style="font-size:1.05rem;color:var(--vd)">' + fmtMoeda(totalGeral) + '</div></div>' +
+  '</div>';
+
+  // — MEMÓRIA DE CÁLCULO —
+  html += '<div class="memoria">';
+  html += '<div class="memoria-tit">Premissas e Memória de Cálculo</div>';
+
+  // — PREMISSAS GERAIS —
+  html += '<div class="mem-secao">';
+  html += '<div class="mem-sec-tit">Premissas Gerais</div>';
+  html += '<div class="mem-linha"><strong>Data final do cálculo:</strong> ' + fmtData(config.dataFim) + '</div>';
+  html += '<div class="mem-linha"><strong>Índice de correção:</strong> ' + describeIndice(config.indice) + '</div>';
+  html += '<div class="mem-linha"><strong>Juros:</strong> ' + describeJuros(config.jurosTipo, config.jurosPct) + '</div>';
+  if (config.multaTipo !== 'sem') html += '<div class="mem-linha"><strong>Multa:</strong> ' + config.multaTipo + ' — ' + config.multaDesc + '</div>';
+  html += '</div>';
+
+  // — ALERTA SE PERÍODO MISTO —
+  var temMisto = resultados.some(function(r){ return r.regimesJuros && r.regimesJuros.length > 1; });
+  if (temMisto) {
+    html += '<div class="mem-alerta">⚠️ <strong>PERÍODO MISTO IDENTIFICADO:</strong> Este cálculo abrange o marco de vigência da Lei nº 14.905/2024 (30/08/2024). Foram aplicados automaticamente regimes de juros diferentes antes e após esse marco, conforme a lei. Veja o detalhamento por período abaixo.</div>';
+  }
+
+  // — DETALHAMENTO POR ITEM —
+  for (var i = 0; i < resultados.length; i++) {
+    var r = resultados[i];
+    html += '<div class="mem-secao">';
+    html += '<div class="mem-sec-tit">Item ' + (i+1) + ': ' + r.desc + '</div>';
+    html += '<div class="mem-linha"><strong>Principal:</strong> ' + fmtMoeda(r.principal) + ' · <strong>Data de início:</strong> ' + fmtData(r.dataInicio) + ' · <strong>Data fim:</strong> ' + fmtData(r.dataFim) + ' · <strong>Meses:</strong> ' + mesesEntre(r.dataInicio, r.dataFim) + '</div>';
+
+    // Premissas correção
+    html += '<div style="margin-top:8px"><strong style="font-family:var(--fn-m);font-size:.74rem;color:var(--az)">CORREÇÃO MONETÁRIA</strong></div>';
+    r.premissasCorr.forEach(function(p){ html += '<div class="mem-linha">› ' + p + '</div>'; });
+
+    // Regimes de correção
+    if (r.regimesCorr && r.regimesCorr.length > 0) {
+      html += '<div class="mem-linha">Regimes aplicados: ' +
+        r.regimesCorr.map(function(rr){ return '<span class="mem-tag">' + rr.regime + ' a partir de ' + rr.mes + '</span>'; }).join(' ') +
+      '</div>';
+    }
+
+    // Fórmula da correção
+    html += '<div class="mem-formula">' +
+      'Valor_corrigido = ' + fmtMoeda(r.principal) + ' × ' + r.fatorCorr.toFixed(6) + '\n' +
+      '              = ' + fmtMoeda(r.corrigido) + '\n' +
+      'Variação: +' + ((r.fatorCorr-1)*100).toFixed(4) + '%' +
+    '</div>';
+
+    // Premissas juros
+    html += '<div style="margin-top:8px"><strong style="font-family:var(--fn-m);font-size:.74rem;color:var(--az)">JUROS DE MORA</strong></div>';
+    r.premissasJuros.forEach(function(p){ html += '<div class="mem-linha">› ' + p + '</div>'; });
+
+    // Regimes de juros
+    if (r.regimesJuros && r.regimesJuros.length > 0) {
+      html += '<div class="mem-linha">Regimes aplicados: ' +
+        r.regimesJuros.map(function(rr){ return '<span class="mem-tag">' + rr.regime + ' a partir de ' + rr.mes + '</span>'; }).join(' ') +
+      '</div>';
+    }
+
+    // Fórmula dos juros
+    if (r.juros > 0) {
+      html += '<div class="mem-formula">' +
+        'Juros = Valor_corrigido × taxa_total_simples\n' +
+        '      = ' + fmtMoeda(r.corrigido) + ' × ' + fmtPct(r.taxaJurosTot) + '\n' +
+        '      = ' + fmtMoeda(r.juros) +
+      '</div>';
+    }
+
+    // Multa
+    if (r.multa > 0) {
+      html += '<div style="margin-top:8px"><strong style="font-family:var(--fn-m);font-size:.74rem;color:var(--az)">MULTA</strong></div>';
+      html += '<div class="mem-formula">Multa = ' + fmtMoeda(r.multa) + '</div>';
+    }
+
+    // Subtotal
+    html += '<div class="mem-formula" style="border-left:3px solid var(--dou)">' +
+      'SUBTOTAL Item ' + (i+1) + ':\n' +
+      '  Principal original:   ' + fmtMoeda(r.principal) + '\n' +
+      '  Correção monetária:   ' + fmtMoeda(r.corrigido - r.principal) + '\n' +
+      '  Juros de mora:        ' + fmtMoeda(r.juros) + '\n' +
+      (r.multa > 0 ? '  Multa:               ' + fmtMoeda(r.multa) + '\n' : '') +
+      '  TOTAL:                ' + fmtMoeda(r.total) +
+    '</div>';
+
+    // Botões de auditoria
+    html += gerarBotaoAudit('audit-corr-'+i, r.logCorr, '🔍 Auditoria correção mês a mês');
+    html += gerarBotaoAudit('audit-jur-'+i, r.logJuros, '🔍 Auditoria juros mês a mês');
+    html += '</div>';
+  }
+
+  // — TABELA CONSOLIDADA —
+  html += '<div class="wrap-res"><table class="tab-res">';
+  html += '<thead><tr><th>Item</th><th>Principal</th><th>Período</th><th>Valor Corrigido</th><th>Juros</th>';
+  if (totalMulta > 0) html += '<th>Multa</th>';
+  html += '<th>TOTAL</th></tr></thead><tbody>';
+
+  for (var j = 0; j < resultados.length; j++) {
+    var rr = resultados[j];
+    html += '<tr>';
+    html += '<td class="vs">' + rr.desc + '</td>';
+    html += '<td class="mf">' + fmtMoeda(rr.principal) + '</td>';
+    html += '<td class="vs">' + fmtData(rr.dataInicio) + ' a ' + fmtData(rr.dataFim) + '</td>';
+    html += '<td class="va">' + fmtMoeda(rr.corrigido) + '</td>';
+    html += '<td class="va">' + fmtMoeda(rr.juros) + '</td>';
+    if (totalMulta > 0) html += '<td class="va">' + fmtMoeda(rr.multa) + '</td>';
+    html += '<td class="vv">' + fmtMoeda(rr.total) + '</td>';
+    html += '</tr>';
+  }
+
+  if (resultados.length > 1) {
+    html += '<tr class="total-row">';
+    html += '<td class="mf">TOTAL GERAL</td>';
+    html += '<td class="mf">' + fmtMoeda(totalPrincipal) + '</td>';
+    html += '<td></td>';
+    html += '<td class="mf">' + fmtMoeda(totalCorrigido) + '</td>';
+    html += '<td class="mf">' + fmtMoeda(totalJuros) + '</td>';
+    if (totalMulta > 0) html += '<td class="mf">' + fmtMoeda(totalMulta) + '</td>';
+    html += '<td class="mf" style="color:var(--vd)">' + fmtMoeda(totalGeral) + '</td>';
+    html += '</tr>';
+  }
+
+  html += '</tbody></table></div>';
+  html += '</div>'; // fecha .memoria
+
+  var el = document.getElementById('resultado-principal');
+  el.innerHTML = html;
+  el.classList.add('on');
+  el.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* ════════════════════════════════════════════════════
+   HELPERS
+════════════════════════════════════════════════════ */
+
+function gerarBotaoAudit(id, linhas, rotulo) {
+  if (!linhas || !linhas.length) return '';
+  return '<button class="btn-audit" onclick="toggleAudit(\'' + id + '\')">' + rotulo + ' (' + linhas.length + ' meses)</button>' +
+    '<div class="bloco-audit" id="' + id + '">' +
+    '<div class="audit-tit">Detalhamento mês a mês</div>' +
+    '<div class="audit-lin">' + linhas.join('\n') + '</div>' +
+    '</div>';
+}
+
+function toggleAudit(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.toggle('on');
+}
+
+function mostrarErro(containerId, msg) {
+  var el = document.getElementById(containerId);
+  el.innerHTML = '<div class="msg-err">❌ ' + msg + '</div>';
+  el.classList.add('on');
+}
+
+function describeIndice(opc) {
+  var m = {
+    'tjdft': 'TJDFT (INPC até 31/08/2024, IPCA a partir de 01/09/2024)',
+    'ipca': 'IPCA (todo o período)',
+    'inpc': 'INPC (todo o período)',
+    'igpm': 'IGP-M (todo o período)',
+    'selic-unica': 'SELIC como taxa única (juros + correção embutidos)'
+  };
+  return m[opc] || opc;
+}
+
+function describeJuros(tipo, pct) {
+  if (tipo === 'sem') return 'Sem juros';
+  if (tipo === 'fixo') return 'Fixo de ' + (pct*100).toFixed(2) + '% a.m. (juros simples)';
+  return 'Legais automáticos (0,5% → 1% → Taxa Legal SELIC−IPCA por período)';
+}
+
+/* ════════════════════════════════════════════════════
+   NAVEGAÇÃO
+════════════════════════════════════════════════════ */
+
+function irPara(idPg, btnEl) {
+  document.querySelectorAll('.pg').forEach(function(p){ p.classList.remove('on'); });
+  document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('on'); });
+  document.getElementById(idPg).classList.add('on');
+  if (btnEl) btnEl.classList.add('on');
+  document.querySelector('.main').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* ════════════════════════════════════════════════════
+   INICIALIZAÇÃO
+════════════════════════════════════════════════════ */
+(function init() {
+  // Adiciona primeira linha de valor automaticamente
+  adicionarValor();
 })();
 </script>
 </body>
