@@ -95,18 +95,22 @@ body {
   margin: 0 auto;
   padding: 28px 20px 26px;
   display: flex;
-  align-items: flex-start;
+  flex-direction: row-reverse;
+  align-items: center;
   gap: 20px;
   flex-wrap: wrap;
   position: relative;
   z-index: 1;
 }
+@media(max-width: 580px) {
+  .header-in { flex-direction: column; align-items: start; }
+}
+
 .logo-wrap {
   flex-shrink: 0;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,1);
   border-radius: var(--rg);
-  padding: 10px;
+  padding: 10px 20px 8px 20px;
   backdrop-filter: blur(4px);
 }
 .header-txt { flex: 1; min-width: 220px; }
@@ -696,17 +700,9 @@ hr.sep { border: none; border-top: 1px solid var(--n200); margin: 22px 0; }
 <header class="header">
   <div class="header-in">
     <div class="logo-wrap">
-      <svg width="58" height="58" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M36 4L64 16L64 42Q64 58 36 68Q8 58 8 42L8 16Z" fill="rgba(37,99,235,0.6)" stroke="rgba(147,197,253,0.5)" stroke-width="1.5"/>
-        <text x="50%" y="40" dominant-baseline="middle" text-anchor="middle" font-family="Poppins,sans-serif" font-weight="700" font-size="15" fill="white" letter-spacing="1">UFLA</text>
-        <path d="M16 52Q36 58 56 52L56 56Q36 62 16 56Z" fill="rgba(6,182,212,0.7)"/>
-        <circle cx="22" cy="25" r="1.8" fill="rgba(147,197,253,0.6)"/>
-        <circle cx="50" cy="25" r="1.8" fill="rgba(147,197,253,0.6)"/>
-        <circle cx="36" cy="18" r="2.4" fill="white" opacity=".8"/>
-      </svg>
+      <img width="150" src="https://www.ufla.br/dcom/wp-content/uploads/2014/06/logo-ufla-transparente.png" alt="Logo" class="logo">
     </div>
     <div class="header-txt">
-      <div class="h-eyebrow">Universidade Federal de Lavras · UFLA</div>
       <h1 class="h-title">Cálculo de Atualização Monetária e Juros</h1>
       <p class="h-sub">Lei nº 14.905/2024 · Resolução CMN nº 5.171/2024 · Nível Tribunal</p>
       <div class="h-meta-row">
